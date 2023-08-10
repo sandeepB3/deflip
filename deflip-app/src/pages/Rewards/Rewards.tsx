@@ -1,44 +1,19 @@
-// RewardsPage.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import rewardsData from './rewards.json';
-import TokenBalance from './TokenBalance';
 import RewardCard from './RewardsCard';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  margin-bottom: 20px;
-`;
-
-const RewardsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-`;
-
-const RewardsPage: React.FC = () => {
-  const [tokenBalance, setTokenBalance] = useState<number>(1000); // Example initial token balance
+import rewardsData from './rewards.json';
 
   const handleRedeem = (rewardCost: number) => {
-    if (tokenBalance >= rewardCost) {
-      setTokenBalance(prevBalance => prevBalance - rewardCost);
-      // Implement logic to actually redeem the reward
-    } else {
-      alert('Insufficient tokens.');
-    }
+    
   };
 
+
+const RewardsPage: React.FC = () => {
   return (
     <Container>
-      <Title>Redeem Your Tokens</Title>
-      <TokenBalance balance={tokenBalance} />
+      <Title>
+        Redeem your Tokens
+      </Title>
       <RewardsContainer>
         {rewardsData.map(reward => (
           <RewardCard
@@ -52,4 +27,28 @@ const RewardsPage: React.FC = () => {
   );
 };
 
+const Container = styled.div`
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+`;
+const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+const RewardsContainer = styled.div`
+
+  display: grid;
+  grid-template-columns: repeat(4 , 1fr);
+  gap: 20px;
+  margin-top: 20px;
+`;
+
+
 export default RewardsPage;
+
+
+
