@@ -1,12 +1,6 @@
-import express from 'express'
-var app = express()
-import {connectToDatabase,db} from './utils/db.js'
+import {db} from '../utils/db.js'
 import bcrypt from 'bcrypt'
-import userRoute from './routes/user_routes.js'
-
-app.use(express.json());
-
-app.post('/signup',async(req,res)=>{
+export const registerUser=async(req,res,next)=>{
     const {emailID,password}=req.body;
      const saltRounds = 10;
     const encryptedPassword = await bcrypt.hash(password, saltRounds)
@@ -27,9 +21,4 @@ app.post('/signup',async(req,res)=>{
         }
     }
     )
-})
-app.use('/user',userRoute)
-app.listen(4000,function(){
-    console.log("App listening on port 4000");
-    connectToDatabase();
-})
+}
