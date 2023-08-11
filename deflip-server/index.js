@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-
 //Iske files mien changes
 const myMiddleware = require('./middlewares/Auth.js');
 const UserAuth = require('./routes/UserAuth.js');
