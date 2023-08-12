@@ -40,6 +40,7 @@ export const loginUser = async (req, res, next) => {
             if (result && result[0]) {
                 const comparison = await bcrypt.compare(password, result[0].password);
                 if (comparison) {
+                    req.session.user=result[0]
                     res.send({
                     status: 'Login successful',
                     status_code: 200,
