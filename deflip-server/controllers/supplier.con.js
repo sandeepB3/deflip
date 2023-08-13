@@ -27,7 +27,7 @@ export const loginSupplier = async (req, res, next) => {
     try {
         const { supplierName, password } = req.body;
 
-        db.query(`SELECT * FROM SUPPLIER WHERE supplierName=?`, [supplierName], async (err, result) => {
+        db.query(`SELECT * FROM SUPPLIER WHERE supplierName=?`, [supplierName], async (err, result1) => {
         if (err) {
             console.error(err);
             res.status(400).send({
@@ -36,19 +36,36 @@ export const loginSupplier = async (req, res, next) => {
                 error: err,
             });
         } else {
-            if (result && result[0]) {
-                console.log(result)
-                const comparison = await bcrypt.compare(password, result[0].password);
+            if (result1 && result1[0]) {
+                console.log(result1[0])
+                const comparison = await bcrypt.compare(password, result1[0].password);
                 if (comparison) {
-                    req.session.supplier=result[0]
-                    res.send({
-                    status: 'Login successful',
-                    status_code: 200,
-                    supplier: result[0],
-                    });
+                    req.session.supplier=result1[0]
+                    db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[result1[0].supplierID], async (err, result2) => {
+                        if(err){
+                            console.error(err);
+                            res.status(400).send({
+                                code: 400,
+                                failed: 'error occurred',
+                                error: err,
+                            });
+                        }else{
+                            if(result2){
+                                console.log(result2);
+                                res.send({
+                                    status_code:200,
+                                    message:"Data Returned",
+                                    supplier: result1[0],
+                                    products:result2
+                                })
+                            }
+                        }
+                    })
                 } else {
                     res.send({
-                    status: 'Login declined',
+                        message: 'Auth Decline',
+                        status_code: 401,
+                        supplier: {},
                     });
                 }
             }
@@ -59,6 +76,37 @@ export const loginSupplier = async (req, res, next) => {
         res.status(500).send('Internal server error');
     }
 };
+
+export const getProducts  =async (req, res, next) => {
+  
+    console.log(req.session)
+    try{
+        const supplierID  = req.body?.supplierID;
+        db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID], async (err, result) => {
+            if(err){
+                console.error(err);
+                res.status(400).send({
+                    code: 400,
+                    failed: 'error occurred',
+                    error: err,
+                });
+            }else{
+                if(result && result[0]){
+                    console.log(result);
+                    res.send({
+                        status_code:200,
+                        message:"Data Returned"
+                    })
+                }
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).send('Internal server error');
+    }
+};
+
 export const logoutSupplier = async (req, res, next) => {
 
     try {
