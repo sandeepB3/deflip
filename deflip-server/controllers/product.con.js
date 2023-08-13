@@ -10,10 +10,9 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-
-export const addProduct = async (req, res, next) => {
+export const addImage = async(req,res) => {
   try {
-    const { productName, cost, supplierID, category,description,brandName,quantity } = req.body;
+  const {productID}=req.params
     if (!req.file) {
       return res.status(400).send('No image uploaded.');
     }
@@ -35,41 +34,63 @@ export const addProduct = async (req, res, next) => {
   
       const uploadResult = await s3.upload(uploadParams).promise();
   
-      // await db.query(
-      //   `UPDATE PRODUCT
-      //   SET imgURL = ?
-      //   WHERE productID = ?`,
-      //   [uploadResult.Location, productID]
-      // );
+      db.query(
+        `UPDATE PRODUCT
+        SET imgURL = ?
+        WHERE productID = ?`,
+        [uploadResult.Location, productID]
+      );
   
       console.log('Upload successful:', uploadResult.Location);
       res.status(200).send('Image uploaded successfully.');
+      }catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+      }
+    }
+
+export const addProduct = async (req, res, next) => {
+  const {productName, cost, supplierID, category, description, brandName, quantity}=req.body
   
-    
-    
-    db.query(`INSERT INTO PRODUCT(productName, cost, supplierID, category,description,brandName,quantity,imgURL) VALUES (?,?,?,?,?,?,?,?)`,
-      [productName, cost, supplierID, category,description,brandName,quantity,uploadResult.Location],async(res,err)=>{
-        if(res){
-          
-          console.log(res)
-          console.log('Product added successfully');
-          res.send({
-                  status: 'Product added successfully',
-                status_code: 200,
-                  });
+    try{
+      
+      db.query(
+        `INSERT INTO PRODUCT(productName, cost, supplierID, category, description, brandName, quantity) VALUES (?,?,?,?,?,?,?)`,
+        [productName, cost, supplierID, category, description, brandName, quantity],
+        async (error, result) => {
+          if (error) {
+            console.error(error);
+            // Handle the error
+            res.status(500).send({
+              status: 'Error adding product',
+              status_code: 500,
+              error: error,
+            });
+          } else {
+            const insertedProductId = result.insertId; // Get the auto-generated product ID
+            console.log(insertedProductId)
+            addImage(insertedProductId)
+            console.log('Product added successfully');
+            res.status(200).send({
+              status: 'Product added successfully',
+              status_code: 200,
+              productID: insertedProductId, // Include the inserted product ID in the response
+            });
+          }
         }
-        else{
-          console.log(err)
-        }
-      })
-    }catch (err) {
-    console.error(err);
-    res.status(500).send('Internal server error');
-  }
+      );
+      
+      }catch(err){
+        console.error(err);
+        res.status(500).send('Internal server error');
+      }
+      
+      
+      
+      
+      
+    
 };
 
 
-export const addImage = async (req, res) => {
-  const { productID } = req.params;
- 
-};
+

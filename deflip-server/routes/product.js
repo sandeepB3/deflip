@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { addProduct, addImage } from '../controllers/product.con.js'
+import { addProduct,addImage} from '../controllers/product.con.js'
 import { authenticateSupplier } from '../middlewares/authenticateSupplier.js';
 
 const router = express.Router({ mergeParams:true })
