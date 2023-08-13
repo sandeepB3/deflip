@@ -119,3 +119,30 @@ export const logoutSupplier = async (req, res, next) => {
         res.status(500).send('Internal server error');
     }
 };
+export const getTopCustomers=async(req,res)=>{
+    const {supplierID}=req.params
+    console.log(supplierID)
+    db.query( `SELECT U.userID,U.emailID, SUM(P.quantity) AS total_quantity_bought
+    FROM USERS U
+    JOIN PURCHASE P ON U.userID = P.userID
+    JOIN PRODUCT PR ON P.productID = PR.productID
+    JOIN SUPPLIER S ON PR.supplierID = S.supplierID
+    WHERE S.supplierID =?
+    GROUP BY U.userID
+    ORDER BY total_quantity_bought DESC
+    LIMIT 10`,[supplierID],async(err,result)=>{
+        if(result){
+            res.send({
+                result
+                });
+           
+        }
+        else{
+            res.send({
+                code: 400,
+                failed: 'error occurred',
+                error: err,
+            });
+        }
+    })
+}

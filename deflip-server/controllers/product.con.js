@@ -10,14 +10,12 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-export const addImage = async(req,res) => {
+export const addImage = async(req,res,next) => {
   try {
   const {productID}=req.params
     if (!req.file) {
       return res.status(400).send('No image uploaded.');
     }
-  
- 
       const imageStream = new Readable();
       imageStream.push(req.file.buffer);
       imageStream.push(null);
@@ -69,7 +67,7 @@ export const addProduct = async (req, res, next) => {
           } else {
             const insertedProductId = result.insertId; // Get the auto-generated product ID
             console.log(insertedProductId)
-            addImage(insertedProductId)
+            
             console.log('Product added successfully');
             res.status(200).send({
               status: 'Product added successfully',
@@ -83,14 +81,32 @@ export const addProduct = async (req, res, next) => {
       }catch(err){
         console.error(err);
         res.status(500).send('Internal server error');
-      }
-      
-      
-      
-      
-      
-    
+      }  
 };
 
 
 
+export const getAllProducts=async(req,res,next)=>{
+  console.log(req.body)
+  const {supplierID}=req.params
+  console.log(supplierID)
+  db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID], async (err, result) => {
+    if(err){
+        console.error(err);
+        res.status(400).send({
+            code: 400,
+            failed: 'error occurred',
+            error: err,
+        });
+    }else{
+        if(result){
+            console.log(result);
+            res.send({
+                status_code:200,
+                message:"Data Returned",
+                products:result
+            })
+        }
+    }
+})
+}

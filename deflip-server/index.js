@@ -14,7 +14,7 @@ app.use(cors())
 import userRoute from './routes/user.js'
 import supplierRoute from './routes/supplier.js'
 import productRoute from './routes/product.js'
-
+import purchaseRoute from './routes/purchase.js'
 //Route uses
 app.use(session({
     secret: 'keyboard cat',
@@ -25,6 +25,7 @@ app.use(session({
 app.use('/user', userRoute)
 app.use('/supplier', supplierRoute)
 app.use('/product', productRoute)
+app.use('/purchase', purchaseRoute)
 
 app.get("/", (req,res) =>{
     res.send("This is index.js");
