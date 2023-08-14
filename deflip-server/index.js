@@ -25,25 +25,25 @@ app.use(express.urlencoded({
 }));
 // app.use(cookieParser())
 
-var sessionStore=new MySQLStoreSession({
-    expiration:1000000000,
-    createDatabaseTable:true,
-    schema:{
-        tableName:'sessiontbl',
-        columnNames:{
-            session_id:'sessionID',
-            expires:'expires',
-            data:'data'
-        }
-    }
-},db)
-app.use(session({
-    key:'key',
-    secret: 'keyboard cat',
-    store:sessionStore,
-    resave: false,
-    saveUninitialized: true,
-  }))
+// var sessionStore=new MySQLStoreSession({
+//     expiration:1000000000,
+//     createDatabaseTable:true,
+//     schema:{
+//         tableName:'sessiontbl',
+//         columnNames:{
+//             session_id:'sessionID',
+//             expires:'expires',
+//             data:'data'
+//         }
+//     }
+// },db)
+// app.use(session({
+//     key:'key',
+//     secret: 'keyboard cat',
+//     store:sessionStore,
+//     resave: false,
+//     saveUninitialized: true,
+//   }))
 // app.use((req,res,next)=>{
 //     req.session.saveAsync = promisify(req.session.save.bind(req.session));
 //     req.session.supplier={}

@@ -18,6 +18,26 @@ export const makePurchase=async(req,res,next)=>{
         }
     })
     }
+    export const purchaseCart=async(req,res,next)=>{
+        try{
+            const{items}=req.body
+            for(let item of items){
+                db.query( `INSERT INTO PURCHASE(productID,userID,quantity) VALUES (?,?,?)`,[item.productID,item.userID,item.quantity])
+            }
+            res.send({
+                status: 'Purchase Added',
+                status_code: 200
+                });
+
+        }catch(e){
+            res.status(500).send({
+                failed:'error occurred',
+                error:e
+            })
+        }
+        
+         
+        }
     // export const registerUser = async (req, res, next) => {
     //     try {
     //         const { emailID, password } = req.body;
