@@ -6,7 +6,7 @@ export const addSupplier = async (req, res, next) => {
         const { supplierName, password } = req.body;
         const saltRounds = 10;
         const encryptedPassword = await bcrypt.hash(password, saltRounds);
-        await db.query(
+        db.query(
             `INSERT INTO SUPPLIER(supplierName, password) VALUES (?, ?)`,
             [supplierName, encryptedPassword]
         );
@@ -37,10 +37,12 @@ export const loginSupplier = async (req, res, next) => {
             });
         } else {
             if (result1 && result1[0]) {
-                console.log(result1[0])
+                
                 const comparison = await bcrypt.compare(password, result1[0].password);
                 if (comparison) {
                     req.session.supplier=result1[0]
+                   
+                    console.log(req.session)
                     db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[result1[0].supplierID], async (err, result2) => {
                         if(err){
                             console.error(err);
@@ -51,7 +53,6 @@ export const loginSupplier = async (req, res, next) => {
                             });
                         }else{
                             if(result2){
-                                console.log(result2);
                                 res.send({
                                     status_code:200,
                                     message:"Data Returned",
@@ -77,35 +78,35 @@ export const loginSupplier = async (req, res, next) => {
     }
 };
 
-export const getProducts  =async (req, res, next) => {
+// export const getProducts  =async (req, res, next) => {
   
-    console.log(req.session)
-    try{
-        const supplierID  = req.body?.supplierID;
-        db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID], async (err, result) => {
-            if(err){
-                console.error(err);
-                res.status(400).send({
-                    code: 400,
-                    failed: 'error occurred',
-                    error: err,
-                });
-            }else{
-                if(result && result[0]){
-                    console.log(result);
-                    res.send({
-                        status_code:200,
-                        message:"Data Returned"
-                    })
-                }
-            }
-        })
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).send('Internal server error');
-    }
-};
+//     console.log(req.session.supplier)
+//     try{
+//         const supplierID  = req.body?.supplierID;
+//         db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID], async (err, result) => {
+//             if(err){
+//                 console.error(err);
+//                 res.status(400).send({
+//                     code: 400,
+//                     failed: 'error occurred',
+//                     error: err,
+//                 });
+//             }else{
+//                 if(result && result[0]){
+//                     console.log(result);
+//                     res.send({
+//                         status_code:200,
+//                         message:"Data Returned"
+//                     })
+//                 }
+//             }
+//         })
+//     }
+//     catch(err){
+//         console.log(err);
+//         res.status(500).send('Internal server error');
+//     }
+// };
 
 export const logoutSupplier = async (req, res, next) => {
 
@@ -145,4 +146,8 @@ export const getTopCustomers=async(req,res)=>{
             });
         }
     })
+}
+export const checkAuth=async(req,res)=>{
+if(req.session.supplier) return res.status(200).send({status:"Authenticated"})
+else return res.status(401).send({status:"Invalid"})
 }

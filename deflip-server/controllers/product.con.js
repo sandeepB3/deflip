@@ -87,12 +87,12 @@ export const addProduct = async (req, res, next) => {
 
 
 export const getAllProducts=async(req,res,next)=>{
-  console.log(req.body)
+  console.log(req.session)
   const {supplierID}=req.params
-  console.log(supplierID)
+  
   db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID], async (err, result) => {
     if(err){
-        console.error(err);
+       
         res.status(400).send({
             code: 400,
             failed: 'error occurred',
@@ -100,7 +100,7 @@ export const getAllProducts=async(req,res,next)=>{
         });
     }else{
         if(result){
-            console.log(result);
+            
             res.send({
                 status_code:200,
                 message:"Data Returned",
