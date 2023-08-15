@@ -37,13 +37,13 @@ app.use(express.urlencoded({
 //         }
 //     }
 // },db)
-// app.use(session({
-//     key:'key',
-//     secret: 'keyboard cat',
-//     store:sessionStore,
-//     resave: false,
-//     saveUninitialized: true,
-//   }))
+app.use(session({
+    key:'key',
+    secret: 'keyboard cat',
+    // store:sessionStore,
+    resave: false,
+    saveUninitialized: true,
+  }))
 // app.use((req,res,next)=>{
 //     req.session.saveAsync = promisify(req.session.save.bind(req.session));
 //     req.session.supplier={}

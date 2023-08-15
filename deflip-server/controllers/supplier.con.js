@@ -1,6 +1,8 @@
 import { db } from '../utils/db.js';
 import bcrypt from 'bcrypt';
-
+import util from 'util'
+const promisify = util.promisify;
+const queryAsync = promisify(db.query).bind(db);
 export const addSupplier = async (req, res, next) => {
     try {
         const { supplierName, password } = req.body;
@@ -77,7 +79,30 @@ export const loginSupplier = async (req, res, next) => {
         res.status(500).send('Internal server error');
     }
 };
+export const loadData= async(req,res,next)=>{
+    const {supplierID}=req.params
+    try{
+        const products=await queryAsync(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[supplierID])
+        const topCustomers=await queryAsync(`SELECT U.userID,U.emailID, SUM(P.quantity) AS total_quantity_bought
+        FROM USERS U
+        JOIN PURCHASE P ON U.userID = P.userID
+        JOIN PRODUCT PR ON P.productID = PR.productID
+        JOIN SUPPLIER S ON PR.supplierID = S.supplierID
+        WHERE S.supplierID =?
+        GROUP BY U.userID
+        ORDER BY total_quantity_bought DESC
+        LIMIT 10`,[supplierID])
+        res.send({
+            products,
+            topCustomers
+        })             
+                
+    }catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
 
+}
 // export const getProducts  =async (req, res, next) => {
   
 //     console.log(req.session.supplier)

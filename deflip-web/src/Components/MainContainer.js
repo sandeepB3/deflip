@@ -41,7 +41,9 @@ const loadAllProducts=async()=>{
       auth.setState({
         products:response.data.products,
         isLoggedIn:auth.state.isLoggedIn,
-        supplier:auth.state.supplier
+        supplier:auth.state.supplier,
+        topCustomers:auth.state.topCustomers,
+
       })
     })
    

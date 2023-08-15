@@ -1,5 +1,8 @@
 import { db } from '../utils/db.js';
 import bcrypt from 'bcrypt';
+import util from 'util'
+const promisify = util.promisify;
+const queryAsync = promisify(db.query).bind(db);
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -61,3 +64,36 @@ export const loginUser = async (req, res, next) => {
 };
 
 
+export const getOrders=async(req,res,next)=>{
+try{
+    const {userID}=req.params
+    const orders=await queryAsync(`SELECT * FROM ORDERS WHERE userID=?`,[userID])
+    res.status(200).send({
+        orders
+    })
+}catch(e){
+    res.status(500).send('Internal server error');
+}
+}
+
+export const getPurchasedItems=async(req,res,next)=>{
+    try{
+        const {orderID}=req.params
+        const items=await queryAsync(`SELECT
+        P.productName,
+        P.imgURL,
+        P.brandName,
+        PU.quantity
+    FROM
+        PURCHASE PU
+    JOIN
+        PRODUCT P ON PU.productID = P.productID
+    WHERE
+        PU.orderID = ?`,[orderID])
+        res.status(200).send({
+            items
+        })
+    }catch(e){
+        res.status(500).send('Internal server error');
+    }
+    }

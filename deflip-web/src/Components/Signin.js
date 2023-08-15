@@ -59,18 +59,18 @@ function SignIn() {
       })
       setSupplierName('')
       setPassword('')
-      console.log(response)
       if(response.data.status_code==200){
         auth.setState({
         isLoggedIn:true,
-        supplier:response.data.supplier,
-        products:response.data.products
+        supplier:auth.state.supplier,
+        products:auth.state.products,
+        topCustomers:auth.state.topCustomers,
       })
       navigate("/")
     }
     else{
       console.log(response.data)
-      navigate("/")
+      navigate("/login")
     }
       
       

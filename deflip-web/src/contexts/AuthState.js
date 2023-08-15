@@ -4,7 +4,8 @@ const AuthState=(props)=>{
     const s1={
         isLoggedIn:false,
         supplier:{},
-        products:[]
+        products:[],
+        topCustomers:[]
     }
     const [state,setState]=useState(s1)
     
