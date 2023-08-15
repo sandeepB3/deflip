@@ -27,7 +27,6 @@ const main = async () => {
   await kartContract.deployUserContract("sandeep");
   const userAddress = await kartContract.deployedContracts("sandeep");
   console.log("\nAddress of user: %s", userAddress);
-  // console.log("\nAddress of user: %s", userAddress);
 
   await kartContract.deploySellerContract("maple store");
   const sellerAddress = await kartContract.deployedContracts("maple store");

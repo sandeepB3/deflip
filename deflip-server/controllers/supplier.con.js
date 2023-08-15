@@ -1,26 +1,86 @@
 import { db } from '../utils/db.js';
 import bcrypt from 'bcrypt';
+import { kartInstance, account, gasPrice } from '../utils/contract.js';
 
 export const addSupplier = async (req, res, next) => {
     try {
-        const { supplierName, password } = req.body;
-        const saltRounds = 10;
-        const encryptedPassword = await bcrypt.hash(password, saltRounds);
-        db.query(
-            `INSERT INTO SUPPLIER(supplierName, password) VALUES (?, ?)`,
-            [supplierName, encryptedPassword]
-        );
+      const { supplierName, password } = req.body;
+      const saltRounds = 10;
+      const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-        console.log('Supplier Account successfully created');
-        res.send({
-            status: 'Supplier Account successfully created',
-            status_code: 200,
-        });
+      const sellerAddress = await deploySellerContract(supplierName);
+      console.log(sellerAddress)
+
+      const tokens = await sendSupplierToken(supplierName, 1000);
+      console.log(tokens)
+
+      db.query(
+        `INSERT INTO SUPPLIER(supplierName, password, contractAdd) VALUES (?, ?, ?)`,
+        [supplierName, encryptedPassword, sellerAddress]
+      );
+
+      console.log('Supplier Account successfully created');
+      res.send({
+          status: 'Supplier Account successfully created',
+          status_code: 200,
+          data: { sellerAddress, tokens}
+
+      });
 
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal server error');
     }
+};
+
+//Web 3 - Supplier Deploy
+const deploySellerContract = async (supplierName) => {
+  try{
+    const gasLimit = await kartInstance.methods.deploySellerContract(supplierName).estimateGas(); 
+      
+    const transaction = {
+      from: account.address,
+      to: process.env.KART_CONTRACT,
+      gasPrice: gasPrice,
+      gasLimit: gasLimit,
+      value: 0
+    };
+
+    const supplierContractDetails = await kartInstance.methods.deploySellerContract(supplierName).send(transaction);
+    // console.log(supplierContractDetails);
+
+    const sellerAddress = await kartInstance.methods.deployedContracts(supplierName).call();
+    return sellerAddress;
+    
+  } catch(err){
+    console.log(err);
+  }
+
+};
+
+//Web 3 - Supplier Onboarding token 
+const sendSupplierToken = async (supplierName, val) => {
+
+  try{
+    const gasLimit = await kartInstance.methods.transferToken(supplierName, val).estimateGas(); 
+      
+    const transaction = {
+        from: account.address,
+        to: process.env.KART_CONTRACT,
+        gasPrice: gasPrice,
+        gasLimit: gasLimit,
+        value: 0
+    };
+
+    const transferDetails = await kartInstance.methods.transferToken(supplierName, val).send(transaction);
+    // console.log(transferDetails);
+
+    const tokens = await kartInstance.methods.checkBalance(supplierName).call();
+    return tokens.toString();
+    
+  } catch(err){
+    console.log(err);
+  }
 };
 
 
@@ -155,5 +215,40 @@ export const checkAuth = async (req, res) => {
       message: "Internal server error",
       error: err,
     });
+  }
+};
+
+//Web 3 - Send Customers token 
+export const sendTopCustomerTokens = async (req, res) => {
+
+  try{
+    const { supplier, customer, token } = req.body;
+
+    const gasLimit = await kartInstance.methods.transferFromSeller(supplier, customer, token).estimateGas(); 
+      
+    const transaction = {
+        from: account.address,
+        to: process.env.KART_CONTRACT,
+        gasPrice: gasPrice,
+        gasLimit: gasLimit,
+        value: 0
+    };
+
+    const transferDetails = await kartInstance.methods.transferFromSeller(supplier, customer, token).send(transaction);
+    console.log(transferDetails);
+
+    const supplierTokens = await kartInstance.methods.checkBalance(supplier).call();
+    const userTokens = await kartInstance.methods.checkBalance(customer).call();  
+
+    console.log('Tokens transfered successfully');
+    res.send({
+      status: 'Tokens transfered successfully',
+      status_code: 200,
+      data: { supplierTokens: supplierTokens.toString(), userTokens: userTokens.toString() }
+    });
+
+  }catch(err){
+    console.error(err);
+    res.status(500).send('Internal server error');
   }
 };
