@@ -83,46 +83,6 @@ export const loginSupplier = async (req, res, next) => {
 };
 
 
-// export const getProducts = async (req, res, next) => {
-//   try {
-//     console.log(req.session.supplier);
-//     const supplierID = req.body?.supplierID;
-
-//     db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [supplierID], async (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         return res.status(400).send({
-//           status_code: 400,
-//           message: 'An error occurred',
-//           error: err,
-//         });
-//       } else {
-//         if (result && result.length > 0) {
-//           console.log(result);
-//           res.send({
-//             status_code: 200,
-//             message: 'Data Returned',
-//             products: result,
-//           });
-//         } else {
-//           res.send({
-//             status_code: 404,
-//             message: 'No products found',
-//           });
-//         }
-//       }
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send({
-//       status_code: 500,
-//       message: 'Internal server error',
-//       error: err,
-//     });
-//   }
-// };
-
-
 export const logoutSupplier = async (req, res, next) => {
   try {
     req.session.supplier = null;
