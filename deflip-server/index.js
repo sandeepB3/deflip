@@ -30,6 +30,7 @@ import purchaseRoute from './routes/purchase.js'
 app.use('/user', userRoute)
 app.use('/supplier', supplierRoute)
 app.use('/product', productRoute)
+app.use('/purchase', purchaseRoute)
 
 app.get("/", (req,res) =>{
     res.send("This is index.js");
