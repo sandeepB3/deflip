@@ -7,7 +7,7 @@ export const registerUser = async (req, res, next) => {
         const saltRounds = 10;
         const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-        await db.query(
+        db.query(
             `INSERT INTO USERS(emailID, password) VALUES (?, ?)`,
             [emailID, encryptedPassword]
         );
@@ -40,6 +40,7 @@ export const loginUser = async (req, res, next) => {
             if (result && result[0]) {
                 const comparison = await bcrypt.compare(password, result[0].password);
                 if (comparison) {
+                    req.session.user=result[0]
                     res.send({
                     status: 'Login successful',
                     status_code: 200,
@@ -58,3 +59,5 @@ export const loginUser = async (req, res, next) => {
         res.status(500).send('Internal server error');
     }
 };
+
+

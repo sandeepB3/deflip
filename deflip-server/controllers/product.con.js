@@ -10,35 +10,14 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-
-export const addProduct = async (req, res, next) => {
+export const addImage = async (req, res, next) => {
   try {
-    const { productName, cost, supplierID, category } = req.body;
-    await db.query(
-      `INSERT INTO PRODUCT(productName, cost, supplierID, category) VALUES (?,?,?,?)`,
-      [productName, cost, supplierID, category]
-    );
+    const { productID } = req.params;
 
-    console.log('Product added successfully');
-    res.send({
-      status: 'Product added successfully',
-      status_code: 200,
-    });
+    if (!req.file) {
+      return res.status(400).send('No image uploaded.');
+    }
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal server error');
-  }
-};
-
-
-export const addImage = async (req, res) => {
-  const { productID } = req.params;
-  if (!req.file) {
-    return res.status(400).send('No image uploaded.');
-  }
-
-  try {
     const imageStream = new Readable();
     imageStream.push(req.file.buffer);
     imageStream.push(null);
@@ -64,9 +43,78 @@ export const addImage = async (req, res) => {
 
     console.log('Upload successful:', uploadResult.Location);
     res.status(200).send('Image uploaded successfully.');
-
   } catch (err) {
-    console.error('Error uploading:', err);
-    res.status(500).send('Error uploading image.');
+    console.error(err);
+    res.status(500).send('Internal server error');
+  }
+};
+
+
+export const addProduct = async (req, res, next) => {
+  const { productName, cost, supplierID, category, description, brandName, quantity } = req.body;
+
+  try {
+    db.query(
+      `INSERT INTO PRODUCT(productName, cost, supplierID, category, description, brandName, quantity) VALUES (?,?,?,?,?,?,?)`,
+      [productName, cost, supplierID, category, description, brandName, quantity],
+      async (error, result) => {
+        if (error) {
+          console.error(error);
+          
+          return res.status(500).send({
+            status: 'Error adding product',
+            status_code: 500,
+            error: error,
+          });
+        }
+
+        const insertedProductId = result.insertId;
+        console.log(insertedProductId);
+
+        console.log('Product added successfully');
+        res.status(200).send({
+          status: 'Product added successfully',
+          status_code: 200,
+          productID: insertedProductId, 
+        });
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal server error');
+  }
+};
+
+
+export const getAllProducts = async (req, res, next) => {
+  try {
+    console.log(req.session);
+    const { supplierID } = req.params;
+
+    db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [supplierID], async (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send({
+          status_code: 500,
+          message: 'An error occurred',
+          error: err,
+        });
+      }
+
+      if (result) {
+        res.send({
+          status_code: 200,
+          message: 'Data Returned',
+          products: result,
+        });
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      status_code: 500,
+      message: 'Internal server error',
+      error: err,
+    });
   }
 };
