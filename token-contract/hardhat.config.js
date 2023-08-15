@@ -13,7 +13,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.18",
   networks: {
-    sepolia: {
+    mumbai: {
       url: process.env.QUICKNODE_KEY,
       accounts: [process.env.PRIVATE_KEY],
     }
