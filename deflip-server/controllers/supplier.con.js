@@ -29,7 +29,7 @@ export const loginSupplier = async (req, res, next) => {
     try {
         const { supplierName, password } = req.body;
 
-        db.query(`SELECT * FROM SUPPLIER WHERE supplierName=?`, [supplierName], async (err, result1) => {
+        db.query(`SELECT * FROM SUPPLIER WHERE supplierName=?`, [supplierName], async (err, result) => {
         if (err) {
             console.error(err);
             res.status(400).send({
@@ -38,39 +38,13 @@ export const loginSupplier = async (req, res, next) => {
                 error: err,
             });
         } else {
-            if (result1 && result1[0]) {
+            if (result && result[0]) {
                 
-                const comparison = await bcrypt.compare(password, result1[0].password);
-                if (comparison) {
-                    req.session.supplier=result1[0]
-                   
-                    console.log(req.session)
-                    db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`,[result1[0].supplierID], async (err, result2) => {
-                        if(err){
-                            console.error(err);
-                            res.status(400).send({
-                                code: 400,
-                                failed: 'error occurred',
-                                error: err,
-                            });
-                        }else{
-                            if(result2){
-                                res.send({
-                                    status_code:200,
-                                    message:"Data Returned",
-                                    supplier: result1[0],
-                                    products:result2
-                                })
-                            }
-                        }
-                    })
-                } else {
-                    res.send({
-                        message: 'Auth Decline',
-                        status_code: 401,
-                        supplier: {},
-                    });
-                }
+                res.send({
+                    status_code:200,
+                    message:"Data Returned",
+                    supplier: result[0],
+                })
             }
         }
         });
