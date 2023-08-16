@@ -1,0 +1,79 @@
+/* SignInPage.css */
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121026;
+}
+
+.form-card {
+  background: #19162c;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.form-card h2 {
+  color: #e9e9ec;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: #d1d0d5;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #443b78;
+  border-radius: 5px;
+  background-color: #252041;
+  color: #e9e9ec;
+  font-size: 14px;
+}
+
+.button {
+  text-decoration: none;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(#ff21bc, #b21783);
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.4),
+    inset -5px -10px 10px #b1147d;
+  cursor: pointer;
+}
+.user-image {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-image img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #252041;
+  object-fit: cover;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+}
+/* Responsive Styles */
+@media screen and (max-width: 525px) {
+  .form-card {
+    max-width: 300px;
+  }
+}
