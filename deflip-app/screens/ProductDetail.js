@@ -21,6 +21,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { addToCart } from "../localStorage/addToCart";
+import { addToWishlist } from "../localStorage/addToWishlist";
+import axios from 'axios';
+
+
 
 const COLOURS = {
   white: "#ffffff",
@@ -33,74 +37,48 @@ const COLOURS = {
   backgroundDark: "#777777",
 };
 
-// const addToCart = async id => {
-//   let itemArray = await AsyncStorage.getItem('cartItems');
-//   itemArray = JSON.parse(itemArray);
-//   if (itemArray) {
-//     let array = itemArray;
-//     array.push(id);
 
-//     try {
-//       await AsyncStorage.setItem('cartItems', JSON.stringify(array));
-//       ToastAndroid.show(
-//         'Item Added Successfully to cart',
-//         ToastAndroid.SHORT,
-//       );
-//       // navigation.navigate('Home');
-//     } catch (error) {
-//       return error;
-//     }
-//   } else {
-//     let array = [];
-//     array.push(id);
-//     try {
-//       await AsyncStorage.setItem('cartItems', JSON.stringify(array));
-//       ToastAndroid.show(
-//         'Item Added Successfully to cart',
-//         ToastAndroid.SHORT,
-//       );
-//       // navigation.navigate('Home');
-//     } catch (error) {
-//       return error;
-//     }
-//   }
-// };
 
 const ProductDetails = () => {
-  const [item, setItem] = useState({
-    id: 3,
-    brand: "Clavin Klien",
-    productName: "Mens Straight Fit Pants",
-    description:
-      "Lorem ipsum dolor sit amet. Qui galisum suscipit ut odio dolores quo assumenda delectus eum voluptas natus et veritatis dolor non libero mollitia! Sit necessitatibus asperiores ea obcaecati iure est rerum dolorem est quia molestias.",
-    productPrice: 200,
-    quantity: 20,
-  });
+  const [item, setItem] = useState([]);
+const id=1;
+  useEffect(() => {
+    axios.get(`http://192.168.13.68:8000/product/details/3`)
+      .then((response) => {
+        console.log(response.data.product);
+        setItem(response.data.product);
+      })
+      .catch((err)=>{
+        
+        console.log(err);
+      })
+  }, []);
 
-  const addToFavourite = async () => {
-    try {
-      const cartItems = await AsyncStorage.getItem("FavItems");
-      let cartArray = cartItems ? JSON.parse(cartItems) : [];
 
-      // Check if the item is already in the cart
-      if (!cartArray.includes(item.id)) {
-        cartArray.push(item.id);
+  // const addToFavourite = async () => {
+  //   try {
+  //     const cartItems = await AsyncStorage.getItem("FavItems");
+  //     let cartArray = cartItems ? JSON.parse(cartItems) : [];
 
-        await AsyncStorage.setItem("FavItems", JSON.stringify(cartArray));
+  //     // Check if the item is already in the cart
+  //     if (!cartArray.includes(item.id)) {
+  //       cartArray.push(item.id);
 
-        ToastAndroid.show(
-          "Item Added Successfully to Wishlist",
-          ToastAndroid.SHORT
-        );
-      } else {
-        ToastAndroid.show("Item already in Wishlist", ToastAndroid.SHORT);
-      }
+  //       await AsyncStorage.setItem("FavItems", JSON.stringify(cartArray));
 
-      console.log(cartItems);
-    } catch (error) {
-      console.error("Error adding to Wishlist:", error);
-    }
-  };
+  //       ToastAndroid.show(
+  //         "Item Added Successfully to Wishlist",
+  //         ToastAndroid.SHORT
+  //       );
+  //     } else {
+  //       ToastAndroid.show("Item already in Wishlist", ToastAndroid.SHORT);
+  //     }
+
+  //     console.log(cartItems);
+  //   } catch (error) {
+  //     console.error("Error adding to Wishlist:", error);
+  //   }
+  // };
 
   return (
     <View
@@ -142,11 +120,10 @@ const ProductDetails = () => {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-
               height: Dimensions.get("window").height / 2,
-              resizeMode: "cover",
+              resizeMode: "contain",
             }}
-            source={require("../assets/category/men.jpg")}
+            source={{uri:item.imgURL}}
           />
         </View>
         <View
@@ -156,23 +133,12 @@ const ProductDetails = () => {
           }}
         >
           <View style={styles.topSection}>
-            <Text style={styles.itemBrand}>{item.brand}</Text>
-            {/* <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity>
-                <Text>-</Text>
-              </TouchableOpacity>
-              <View>
-                <Text>{2}</Text>
-              </View>
-              <TouchableOpacity>
-                <Text>+</Text>
-              </TouchableOpacity>
-            </View> */}
+            <Text style={styles.itemBrand}>{item.brandName}</Text>
           </View>
 
           <Text style={styles.itemName}>{item.productName}</Text>
 
-          <Text style={styles.itemPrice}>₹{7000}</Text>
+          <Text style={styles.itemPrice}>₹{item.cost}</Text>
 
           <View style={styles.box}>
             <Text style={styles.check}>CHECK DELIVERY AND SERVICES</Text>
@@ -266,7 +232,7 @@ const ProductDetails = () => {
       <View style={styles.bottom}>
         <TouchableOpacity
           style={styles.addFavbtn}
-          onPress={() => (item.quantity > 0 ? addToFavourite(item.id) : null)}
+          onPress={() => (item.quantity > 0 ? addToWishlist(item) : null)}
         >
           <AntDesign name="hearto" size={24} color="white" />
           <Text style={styles.addText}>Wishlist</Text>
@@ -327,7 +293,7 @@ const styles = StyleSheet.create({
     maxWidth: "84%",
   },
   itemName: {
-    fontSize: 13,
+    fontSize: 15,
     color: COLOURS.black,
     fontWeight: "400",
     letterSpacing: 1,

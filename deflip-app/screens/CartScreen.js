@@ -16,7 +16,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CartItem from "../components/CartItems";
 import { AntDesign } from "@expo/vector-icons";
+import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
+
+
 
 const COLOURS = {
   white: "#ffffff",
@@ -29,17 +32,36 @@ const COLOURS = {
   backgroundDark: "#777777",
 };
 
+
+
+
 const CartScreen = ({ navigation }) => {
   const [product, setProduct] = useState();
-  const [total, setTotal] = useState(null);
+  const [total, setTotal] = useState(0);
   const [visible, setVisible] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const [Items, setItems] = useState([]);
+
+  const placeOrder = async() =>{
+    const order= product.map(item => {
+      return {
+      userID:6,
+        productID: item.productID,
+        quantity: item.quantity
+      };
+    });
+    console.log("Order:",product);
+    await axios.post("http://192.168.13.68:8000/purchase/cart",{
+      items:order,
+      total : total,
+      userID : 9
+    })
+    setOrder([]);
+  }
 
   useEffect( () => {
 
-    getDataFromDB()
+     getDataFromDB()
     .then((productData)=>{
       setProduct(productData);
       getTotal(productData);
@@ -47,20 +69,20 @@ const CartScreen = ({ navigation }) => {
     .catch((error)=>{
       console.log(error);
     });
+    
 
   }, [navigation]);
 
-  //get data from local DB by ID
-  
 
   //get total price of all items in the cart
-  const getTotal = (productData) => {
-    let total = 0;
+  const getTotal = async(productData) => {
+    let totalCalc = 0;
+    console.log(total);
     for (let index = 0; index < productData.length; index++) {
-      let productPrice = productData[index].productPrice;
-      total = total + productPrice;
+      let productPrice = productData[index].cost* productData[index].quantity;
+      totalCalc = totalCalc + productPrice;
     }
-    setTotal(total);
+    setTotal(totalCalc);
   };
 
   //remove data from Cart
@@ -83,7 +105,8 @@ const CartScreen = ({ navigation }) => {
 
   const checkOut = async () => {
     try {
-      await AsyncStorage.removeItem("cartItems");
+      placeOrder();
+      // await AsyncStorage.removeItem("cartItems");
       setVisible(true);
       setModalVisible(true); // Show the modal
       Animated.timing(opacityValue, {
@@ -126,7 +149,7 @@ const CartScreen = ({ navigation }) => {
  
 
   const renderProducts = (data) => {
-    console.log("RenderData : ",data);
+    // console.log("RenderData : ",data);
     return (
       <View>
         {/* {data.map((dat) => { */}
@@ -165,7 +188,7 @@ const CartScreen = ({ navigation }) => {
 
       <ScrollView>
         <View style={{ paddingHorizontal: 16 }}>
-          {console.log("Productssss: ",product)}
+          {/* {console.log("Productssss: ",product)} */}
           {product ? (
             product.map((data)=>(
               <CartItem key={data.id} data={data}/>
@@ -232,7 +255,7 @@ const CartScreen = ({ navigation }) => {
                 {" "}
                 Total Amount
               </Text>
-              <Text style={styles.amount}> ₹{6600}</Text>
+              <Text style={styles.amount}> ₹{total}</Text>
             </View>
           </View>
         </View>
@@ -252,7 +275,7 @@ const CartScreen = ({ navigation }) => {
           style={styles.checkoutBtn}
         >
           <Text style={styles.checkoutBtnTxt}>
-            PLACE ORDER (&#8377;{total + total / 20} )
+            PLACE ORDER ₹{total} 
           </Text>
         </TouchableOpacity>
       </View>

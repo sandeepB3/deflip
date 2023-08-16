@@ -35,6 +35,7 @@ export const makePurchase = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
   try {
+    console.log("hi")
       const { items, total, userID } = req.body;
       const currentDate = new Date();
 

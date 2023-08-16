@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const queryAsync = promisify(db.query).bind(db);
-import { deploySellerContract, sendSupplierToken } from '../helper/SellerContract.js';
+import { deploySellerContract, sendSupplierTokens } from '../helper/SellerContract.js';
 
 export const addSupplier = async (req, res) => {
     try {
@@ -14,7 +14,7 @@ export const addSupplier = async (req, res) => {
       const sellerAddress = await deploySellerContract(supplierName);
       console.log(sellerAddress)
 
-      const tokens = await sendSupplierToken(supplierName, 1000);
+      const tokens = await sendSupplierTokens(supplierName, 1000);
       console.log(tokens)
 
       db.query(
