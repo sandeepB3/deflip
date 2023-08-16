@@ -1,5 +1,5 @@
 import express from 'express'
-import { addSupplier, loginSupplier, logoutSupplier, getTopCustomers, loadData } from '../controllers/supplier.con.js'
+import { addSupplier, loginSupplier, logoutSupplier, getTopCustomers, loadData,getAuth } from '../controllers/supplier.con.js'
 import { sendTopCustomerTokens } from '../helper/SellerContract.js'
 import { verifySupplierToken } from '../middlewares/verifySupplier.js' 
 
@@ -11,5 +11,7 @@ router.post('/sendTokens', sendTopCustomerTokens)
 router.post('/logout', logoutSupplier)
 router.get('/getDashboardData/:supplierID', loadData)
 router.get('/getTopCustomers/:supplierID', getTopCustomers)
+router.get('/auth', verifySupplierToken, getAuth)
+
 
 export default router;

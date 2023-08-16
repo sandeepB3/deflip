@@ -21,13 +21,14 @@ const SignIn = () => {
       })
       setSupplierName('')
       setPassword('')
-      if(response.data.status_code==200){
+      if(response.status==200){
         auth.setState({
         isLoggedIn:true,
         supplier:response.data.supplier,
         products:auth.state.products,
         topCustomers:auth.state.topCustomers,
       })
+      localStorage.setItem('token',response.data.token)
       navigate("/")
     }
     else{
