@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Discount Coupon",
+    "description": "Get 10% off your next purchase",
+    "cost": 100
+  },
+  {
+    "id": 2,
+    "title": "$20 Gift Card",
+    "description": "Redeem for a $20 gift card",
+    "cost": 200
+  },
+  {
+    "id": 3,
+    "title": "Free Shipping",
+    "description": "Enjoy free shipping on your next order",
+    "cost": 150
+  },
+  {
+    "id": 4,
+    "title": "Discount Coupon",
+    "description": "Get 10% off your next purchase",
+    "cost": 100
+  },
+  {
+    "id": 5,
+    "title": "$20 Gift Card",
+    "description": "Redeem for a $20 gift card",
+    "cost": 200
+  },
+  {
+    "id": 6,
+    "title": "Free Shipping",
+    "description": "Enjoy free shipping on your next order",
+    "cost": 150
+  }
+]
