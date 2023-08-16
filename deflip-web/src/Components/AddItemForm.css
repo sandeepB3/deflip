@@ -1,0 +1,36 @@
+/* Customize styling based on your existing styles */
+
+.add-item-form {
+    background: #19162c;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+    margin-top: 20px;
+   
+  }
+  
+  .add-item-form h2 {
+    color: #d1d0d5;
+    margin-bottom: 10px;
+  }
+  
+  .add-item-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #d1d0d5;
+  }
+  
+  .add-item-form input,
+  .add-item-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d0d5;
+    border-radius: 5px;
+    background: #252041;
+    color: #d1d0d5;
+  }
+  
+  .add-item-form button {
+    margin-top: 15px;
+  }
+  
