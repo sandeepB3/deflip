@@ -10,11 +10,19 @@ function Screen() {
     const navigate = useNavigate()
     useEffect(() => {
         // Update the document title using the browser API
-        if(!auth.state.isLoggedIn){
-          navigate("/login")
-        }
+        if(!auth.state.isLoggedIn) navigate('/login')
+        console.log(auth.state.supplier.supplierID)
+        axios.get(`http://localhost:4000/supplier/getDashboardData/${auth.state.supplier.supplierID}`).then((response)=>{
+          console.log(response)
+          auth.setState({
+            isLoggedIn:true,
+            supplier:auth.state.supplier,
+            products:response.data.products,
+            topCustomers:response.data.topCustomers
+          })
+        })
       },[]);
-    
+      
       
 
   return (

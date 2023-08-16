@@ -2,7 +2,9 @@ import React, { useState,useContext } from 'react';
 import axios from 'axios';
 import './AddItemForm.css'; // Import your custom CSS for styling
 import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const AddItemForm = () => {
+  const navigate=useNavigate()
   const auth=useContext(AuthContext)
   const [itemName, setItemName] = useState('');
   const [category, setCategory] = useState('');
@@ -39,7 +41,7 @@ console.log(res)
     setDescription('');
     setQuantity(0);
     setSelectedFile(null)
-    
+    navigate('/')
   }catch(err){
     console.log(err);
   }

@@ -1,10 +1,11 @@
 import { AuthContext } from "./AuthContext";
-import React,{useState} from "react";
+import React, {useState} from "react";
 const AuthState=(props)=>{
-    const s1={
+    const s1 = {
         isLoggedIn:false,
         supplier:{},
-        products:[]
+        products:[],
+        topCustomers:[]
     }
     const [state,setState]=useState(s1)
     
