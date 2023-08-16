@@ -29,8 +29,9 @@ export default App = () => {
     // <ProductDetails></ProductDetails>
     <>
     <StatusBar hidden backgroundColor="white" />
-    {/* <ProductDetails/> */}
-    <CartScreen/>
+    <HomeScreen/>
+    {/* <ProductDetails></ProductDetails> */}
+  
     </>
   );
 

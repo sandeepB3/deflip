@@ -7,7 +7,7 @@ const COLOURS = {
 };
 
 const CartItem = ({ data }) => {
-  console.log("Cart Item : ", data)
+  // console.log("Cart Item : ", data)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.leftContainer}>

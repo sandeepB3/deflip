@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/Searchbar";
+import axios from 'axios';
 
 const ProductList = () => {
   const [data, setData] = useState([]);
@@ -22,13 +23,16 @@ const ProductList = () => {
   const searchRef = useRef();
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
+    axios.get("http://192.168.13.68:8000/product/electronics")
       .then((response) => {
-        console.log(response);
-        setData(response);
+        console.log("Hiiii")
+        console.log(response.data.products);
+        setData(response.data.products);
         setOldData(response);
-      });
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
   }, []);
 
   const handlePressFilter = () => {
