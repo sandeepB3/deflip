@@ -1,10 +1,13 @@
 import { db } from '../utils/db.js';
 import bcrypt from 'bcrypt';
-import { kartInstance, account, gasPrice } from '../utils/contract.js';
+import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
+const queryAsync = promisify(db.query).bind(db);
+import { deploySellerContract, sendSupplierToken } from '../helper/SellerContract.js';
 
-export const addSupplier = async (req, res, next) => {
+export const addSupplier = async (req, res) => {
     try {
-      const { supplierName, password } = req.body;
+      const { supplierName, password, address } = req.body;
       const saltRounds = 10;
       const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -15,16 +18,35 @@ export const addSupplier = async (req, res, next) => {
       console.log(tokens)
 
       db.query(
-        `INSERT INTO SUPPLIER(supplierName, password, contractAdd) VALUES (?, ?, ?)`,
-        [supplierName, encryptedPassword, sellerAddress]
+        `INSERT INTO SUPPLIER(supplierName, password, address, contractAdd) VALUES (?, ?, ?, ?)`,
+        [supplierName, encryptedPassword, address, sellerAddress]
       );
+
+      let data = null;
+      db.query(`SELECT * FROM SUPPLIER WHERE supplierName = ?`, [supplierName], async (err, result) => {
+        data = result[0];
+      });
+
+      const supplier = {
+        user_id: data.supplierID,
+        email: data.supplierName,
+        address: data.address,
+        contract: data.contractAdd
+      }
+      
+      const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
+
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        maxAge: parseInt(process.env.AT_EXP) * 1000,
+      });
 
       console.log('Supplier Account successfully created');
       res.send({
-          status: 'Supplier Account successfully created',
-          status_code: 200,
-          data: { sellerAddress, tokens}
-
+        status: 'Supplier Account successfully created',
+        status_code: 200,
+        supplier: supplier,
+        token: accessToken,
       });
 
     } catch (err) {
@@ -33,62 +55,12 @@ export const addSupplier = async (req, res, next) => {
     }
 };
 
-//Web 3 - Supplier Deploy
-const deploySellerContract = async (supplierName) => {
-  try{
-    const gasLimit = await kartInstance.methods.deploySellerContract(supplierName).estimateGas(); 
-      
-    const transaction = {
-      from: account.address,
-      to: process.env.KART_CONTRACT,
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-      value: 0
-    };
-
-    const supplierContractDetails = await kartInstance.methods.deploySellerContract(supplierName).send(transaction);
-    // console.log(supplierContractDetails);
-
-    const sellerAddress = await kartInstance.methods.deployedContracts(supplierName).call();
-    return sellerAddress;
-    
-  } catch(err){
-    console.log(err);
-  }
-
-};
-
-//Web 3 - Supplier Onboarding token 
-const sendSupplierToken = async (supplierName, val) => {
-
-  try{
-    const gasLimit = await kartInstance.methods.transferToken(supplierName, val).estimateGas(); 
-      
-    const transaction = {
-        from: account.address,
-        to: process.env.KART_CONTRACT,
-        gasPrice: gasPrice,
-        gasLimit: gasLimit,
-        value: 0
-    };
-
-    const transferDetails = await kartInstance.methods.transferToken(supplierName, val).send(transaction);
-    // console.log(transferDetails);
-
-    const tokens = await kartInstance.methods.checkBalance(supplierName).call();
-    return tokens.toString();
-    
-  } catch(err){
-    console.log(err);
-  }
-};
-
 
 export const loginSupplier = async (req, res, next) => {
   try {
     const { supplierName, password } = req.body;
 
-    db.query(`SELECT * FROM SUPPLIER WHERE supplierName=?`, [supplierName], async (err, result1) => {
+    db.query(`SELECT * FROM SUPPLIER WHERE supplierName = ?`, [supplierName], async (err, result1) => {
       if (err) {
         console.error(err);
         return res.status(400).send({
@@ -97,13 +69,24 @@ export const loginSupplier = async (req, res, next) => {
           error: err,
         });
       }
-
       if (result1 && result1[0]) {
         const comparison = await bcrypt.compare(password, result1[0].password);
         if (comparison) {
-          req.session.supplier = result1[0];
-          console.log(req.session);
-
+          
+          const supplier = {
+            user_id: result1[0].supplierID,
+            email: result1[0].supplierName,
+            address: result1[0].address,
+            contract: result1[0].contractAdd
+          }
+          
+          const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
+    
+          res.cookie('access_token', accessToken, {
+            httpOnly: true,
+            maxAge: parseInt(process.env.AT_EXP) * 1000,
+          });
+    
           db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [result1[0].supplierID], async (err, result2) => {
             if (err) {
               console.error(err);
@@ -114,24 +97,27 @@ export const loginSupplier = async (req, res, next) => {
               });
             }
 
-            if (result2) {
+            if(result2) {
               res.send({
                 status_code: 200,
                 message: 'Data Returned',
                 supplier: result1[0],
                 products: result2,
+                token: accessToken
               });
             }
           });
+
         } else {
           res.send({
             message: 'Authentication Declined',
             status_code: 401,
-            supplier: {},
+            supplier: { },
           });
         }
       }
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).send({
@@ -145,7 +131,6 @@ export const loginSupplier = async (req, res, next) => {
 
 export const logoutSupplier = async (req, res, next) => {
   try {
-    req.session.supplier = null;
     res.status(201).send({
       message: "Logged out successfully",
     });
@@ -200,55 +185,30 @@ export const getTopCustomers = async (req, res) => {
   }
 };
 
-
-export const checkAuth = async (req, res) => {
+export const loadData = async (req, res, next) => {
+  const { supplierID } = req.params;
   try {
-    if (req.session.supplier) {
-      return res.status(200).send({ status: "Authenticated" });
-    } else {
-      return res.status(401).send({ status: "Invalid" });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({
-      status_code: 500,
-      message: "Internal server error",
-      error: err,
-    });
-  }
-};
+      const productsQuery = `SELECT * FROM PRODUCT WHERE supplierId = ?`;
+      const products = await queryAsync(productsQuery, [supplierID]);
 
-//Web 3 - Send Customers token 
-export const sendTopCustomerTokens = async (req, res) => {
+      const topCustomersQuery = `
+          SELECT U.userID, U.emailID, SUM(P.quantity) AS total_quantity_bought
+          FROM USERS U
+          JOIN PURCHASE P ON U.userID = P.userID
+          JOIN PRODUCT PR ON P.productID = PR.productID
+          JOIN SUPPLIER S ON PR.supplierID = S.supplierID
+          WHERE S.supplierID = ?
+          GROUP BY U.userID
+          ORDER BY total_quantity_bought DESC
+          LIMIT 10`;
+      const topCustomers = await queryAsync(topCustomersQuery, [supplierID]);
 
-  try{
-    const { supplier, customer, token } = req.body;
-
-    const gasLimit = await kartInstance.methods.transferFromSeller(supplier, customer, token).estimateGas(); 
-      
-    const transaction = {
-        from: account.address,
-        to: process.env.KART_CONTRACT,
-        gasPrice: gasPrice,
-        gasLimit: gasLimit,
-        value: 0
-    };
-
-    const transferDetails = await kartInstance.methods.transferFromSeller(supplier, customer, token).send(transaction);
-    console.log(transferDetails);
-
-    const supplierTokens = await kartInstance.methods.checkBalance(supplier).call();
-    const userTokens = await kartInstance.methods.checkBalance(customer).call();  
-
-    console.log('Tokens transfered successfully');
-    res.send({
-      status: 'Tokens transfered successfully',
-      status_code: 200,
-      data: { supplierTokens: supplierTokens.toString(), userTokens: userTokens.toString() }
-    });
-
-  }catch(err){
-    console.error(err);
-    res.status(500).send('Internal server error');
+      res.send({
+          products,
+          topCustomers
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal server error');
   }
 };

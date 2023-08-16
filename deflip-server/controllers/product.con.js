@@ -10,7 +10,7 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-export const addImage = async (req, res, next) => {
+export const addImage = async (req, res) => {
   try {
     const { productID } = req.params;
 
@@ -50,7 +50,7 @@ export const addImage = async (req, res, next) => {
 };
 
 
-export const addProduct = async (req, res, next) => {
+export const addProduct = async (req, res) => {
   const { productName, cost, supplierID, category, description, brandName, quantity } = req.body;
 
   try {
@@ -86,11 +86,10 @@ export const addProduct = async (req, res, next) => {
 };
 
 
-export const getAllProducts = async (req, res, next) => {
+export const getAllProducts = async (req, res) => {
   try {
-    console.log(req.session);
+    
     const { supplierID } = req.params;
-
     db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [supplierID], async (err, result) => {
       if (err) {
         console.error(err);
