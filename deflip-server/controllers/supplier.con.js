@@ -17,23 +17,18 @@ export const addSupplier = async (req, res) => {
       const tokens = await sendSupplierTokens(supplierName, 1000);
       console.log(tokens)
 
-      db.query(
+      const result = await queryAsync(
         `INSERT INTO SUPPLIER(supplierName, password, address, contractAdd) VALUES (?, ?, ?, ?)`,
         [supplierName, encryptedPassword, address, sellerAddress]
       );
-
-      let data = null;
-      db.query(`SELECT * FROM SUPPLIER WHERE supplierName = ?`, [supplierName], async (err, result) => {
-        data = result[0];
-      });
-
+     
       const supplier = {
-        user_id: data.supplierID,
-        email: data.supplierName,
-        address: data.address,
-        contract: data.contractAdd
+        supplierID: result.insertId,
+        email: supplierName,
+        address: address,
+        contract: sellerAddress
       }
-      
+
       const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
 
       res.cookie('access_token', accessToken, {
@@ -56,7 +51,7 @@ export const addSupplier = async (req, res) => {
 };
 
 
-export const loginSupplier = async (req, res, next) => {
+export const loginSupplier = async (req, res) => {
   try {
     const { supplierName, password } = req.body;
 
@@ -74,45 +69,25 @@ export const loginSupplier = async (req, res, next) => {
         if (comparison) {
           
           const supplier = {
-            user_id: result1[0].supplierID,
+            supplier_id: result1[0].supplierID,
             email: result1[0].supplierName,
             address: result1[0].address,
             contract: result1[0].contractAdd
           }
           
           const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
-    
-          res.cookie('access_token', accessToken, {
-            httpOnly: true,
-            maxAge: parseInt(process.env.AT_EXP) * 1000,
-          });
-    
-          db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [result1[0].supplierID], async (err, result2) => {
-            if (err) {
-              console.error(err);
-              return res.status(400).send({
-                status_code: 400,
-                message: 'An error occurred',
-                error: err,
-              });
-            }
 
-            if(result2) {
-              res.send({
-                status_code: 200,
-                message: 'Data Returned',
-                supplier: result1[0],
-                products: result2,
-                token: accessToken
-              });
-            }
-          });
+          res.status(200).send({
+            message: 'Auth Successfull',
+            supplier,
+            token: accessToken
+          })
 
-        } else {
-          res.send({
+        }
+        else {
+          res.status(401).send({
             message: 'Authentication Declined',
-            status_code: 401,
-            supplier: { },
+            supplier: {},
           });
         }
       }
@@ -144,6 +119,21 @@ export const logoutSupplier = async (req, res, next) => {
   }
 };
 
+export const getAuth = async(req, res) => {
+  const { supplier } = req.supplier
+  try{
+    res.status(200).send({
+      message: "Token Authorization",
+      supplier
+    })
+  }catch(err){
+    res.status(500).send({
+      status_code: 500,
+      message: "Internal server error",
+      error: err,
+    });
+  }
+}
 
 export const getTopCustomers = async (req, res) => {
   try {
@@ -185,6 +175,8 @@ export const getTopCustomers = async (req, res) => {
   }
 };
 
+
+
 export const loadData = async (req, res, next) => {
   const { supplierID } = req.params;
   try {
@@ -203,12 +195,16 @@ export const loadData = async (req, res, next) => {
           LIMIT 10`;
       const topCustomers = await queryAsync(topCustomersQuery, [supplierID]);
 
-      res.send({
-          products,
-          topCustomers
+      const supplierQuery = `SELECT * FROM SUPPLIER WHERE supplierId = ?`;
+      const supplier = await queryAsync(supplierQuery, [supplierID]);
+      res.status(200).send({
+        message: 'Data Loaded',
+        products,
+        topCustomers,
+        supplier,
       });
-  } catch (error) {
+    }catch (error) {
       console.error(error);
       res.status(500).send('Internal server error');
-  }
+    }
 };

@@ -1,15 +1,16 @@
 import React from "react";
-import { BsFillHeartFill } from "react-icons/bs";
+import { CiDeliveryTruck} from "react-icons/ci";
 
-function CardMain({ imgSrc, title, hearts,cost }) {
+function CardMain({ imgSrc, title, quantity,cost }) {
   return (
-    <div className="card_main">
-      <img src={imgSrc} alt="" className="card_main_img" />
+    <div className="card_main" style={{"height":"60vh",width:"100%"}}>
+      <div></div>
+      <img style={{height:"65%",width:"100%"}} src={imgSrc} alt="" className="card_main_img" />
       <div className="card_main_name">
         <h2>{title}</h2>
         <div className="card_main_icon">
           <i>
-            <BsFillHeartFill /> <span>{hearts}</span>
+            <CiDeliveryTruck/><span>{quantity} Units</span>
           </i>
         </div>
       </div>

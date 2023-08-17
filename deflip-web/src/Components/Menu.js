@@ -1,17 +1,10 @@
 import React, { useEffect } from "react";
 import "./Menu.css";
 import logo from "../img/logo.png";
-import {
-  FaDelicious,
-  FaShoppingCart,
-  FaWallet,
-  FaChartLine,
-  FaRegClock,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaDelicious, FaShoppingCart, FaWallet, FaChartLine, FaRegClock, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 function Menu() {
+  
   useEffect(() => {
     const mainMenuLi = document
       .getElementById("mainMenu")

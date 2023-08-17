@@ -1,36 +1,60 @@
-import React, { useState,useContext,useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../App.css';
 import axios from 'axios';
 import Container from './Container';
 import Menu from './Menu';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-function Screen() {
-    const auth = useContext(AuthContext)
-    const navigate = useNavigate()
-    useEffect(() => {
-        // Update the document title using the browser API
-        if(!auth.state.isLoggedIn) navigate('/login')
-        console.log(auth.state.supplier.supplierID)
-        axios.get(`http://localhost:4000/supplier/getDashboardData/${auth.state.supplier.supplierID}`).then((response)=>{
-          console.log(response)
-          auth.setState({
-            isLoggedIn:true,
-            supplier:auth.state.supplier,
-            products:response.data.products,
-            topCustomers:response.data.topCustomers
-          })
-        })
-      },[]);
-      
-      
 
-  return (
-    <div className="App">
-      <Menu/>
-      <Container/>
-    </div>
-  );
+async function fetchData(token, auth) {
+    try {
+        const { data } = await axios.get('http://localhost:4000/supplier/auth', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        console.log(data);
+        const id = data.supplier.supplier_id
+
+        const response = await axios.get(`http://localhost:4000/supplier/getDashboardData/${id}`);
+        console.log(response.data);
+
+        auth.setState({
+            isLoggedIn: true,
+            supplier: response.data.supplier[0],
+            products: response.data.products,
+            topCustomers: response.data.topCustomers,
+            Authorization: `Bearer ${token}`
+        });
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+function Screen() {
+    const auth = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      console.log(`Bearer ${token}`);
+
+      if (token) {
+          fetchData(token, auth);
+      } else {
+          navigate('/login');
+      }
+    }, [auth.setState]);
+
+    return (
+        <div className="App">
+          <Menu />
+          <Container />
+        </div>
+    );
 }
 
 export default Screen;
+

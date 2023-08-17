@@ -30,7 +30,7 @@ const auth = useContext(AuthContext)
 
   return (
     <>
-         {auth.state.products.map((product,i)=><CardMain imgSrc={product.imgURL} title={product.productName} hearts={"56"} key={i} cost={product.cost} />
+         {auth.state.products.map((product,i)=><CardMain imgSrc={product.imgURL} title={product.productName} quantity={product?.quantity} key={i} cost={product.cost} />
             )} 
             {/* <CardMain imgSrc={Card1} title={"Cubic Thunder"} hearts={"65"} />
             <CardMain imgSrc={Card2} title={"Pokemon Ball"} hearts={"65"} />
