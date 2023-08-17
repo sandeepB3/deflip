@@ -23,7 +23,7 @@ const ProductList = () => {
   const searchRef = useRef();
 
   useEffect(() => {
-    axios.get("http://192.168.13.68:8000/product/electronics")
+    axios.get("https://192.168.13.168:8000/product/electronics")
       .then((response) => {
         console.log("Hiiii")
         console.log(response.data.products);
