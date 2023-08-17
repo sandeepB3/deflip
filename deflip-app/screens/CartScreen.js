@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  ToastAndroid,
+import { View, Text, ScrollView, TouchableOpacity, Image, ToastAndroid,
   Modal,
   Animated,
   StyleSheet,
   TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CartItem from "../components/CartItems";
 import { AntDesign } from "@expo/vector-icons";
 import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const COLOURS = {
@@ -35,12 +29,13 @@ const COLOURS = {
 
 
 
-const CartScreen = ({ navigation }) => {
+const CartScreen = () => {
   const [product, setProduct] = useState();
   const [total, setTotal] = useState(0);
   const [visible, setVisible] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
-
+  
+  const navigation = useNavigation();
 
   const placeOrder = async() =>{
     const order= product.map(item => {
@@ -160,7 +155,7 @@ const CartScreen = ({ navigation }) => {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         width: "100%",
         height: "100%",
@@ -172,7 +167,7 @@ const CartScreen = ({ navigation }) => {
         <View style={styles.topLeft}>
           <TouchableOpacity
             style={styles.back}
-            onPress={() => navigation.goBack("Home")}
+            onPress={() => navigation.goBack()}
           >
             <AntDesign name="arrowleft" color="black" size={25}></AntDesign>
           </TouchableOpacity>
@@ -303,7 +298,7 @@ const CartScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

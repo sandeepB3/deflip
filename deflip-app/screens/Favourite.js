@@ -12,7 +12,7 @@ import {
   TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import CartItem from "../components/CartItems";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -29,7 +29,7 @@ const COLOURS = {
 
 const FavouriteScreen = () => {
   return (
-    <View
+    <SafeAreaView
       style={{
         width: "100%",
         height: "100%",
@@ -67,7 +67,7 @@ const FavouriteScreen = () => {
         <CartItem />
 
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

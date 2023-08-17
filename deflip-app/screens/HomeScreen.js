@@ -1,55 +1,42 @@
-import {
-    Button,
-    Text,
-    Alert,
-    Animated,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-    View,
-    Dimensions,
-    Image,
-} from "react-native";
+import { Button, Text, Alert, Animated, StyleSheet, TouchableOpacity, ScrollView, View, Dimensions, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CarouselOffer from "../components/CarouselOffer";
 import Categories from "../components/Categories";
 import GlobalBrands from "../components/GlobalBrands";
 import BrandDeals from "../components/BrandDeals";
 import Searchbar from "../components/Searchbar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
-
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
     return (
+        <SafeAreaView style={styles.container}>
 
-        <View style={styles.container}>
-             <View style={styles.body}>
+            <View style={styles.body}>
+                <ScrollView 
+                    vertical={true}  
+                    contentContainerStyle={{width: Dimensions.get('window').width,
+                }}>
 
-                    <ScrollView 
-                      vertical={true}  
-                      contentContainerStyle={{width: Dimensions.get('window').width,
-                    }}>
+                    <Searchbar/>    
 
-                        <Searchbar/>
-                        
-
-                        <Text style={styles.headings}>Shop By Category</Text>
-                        <Categories/>
+                    <Text style={styles.headings}>Shop By Category</Text>
+                    <Categories/>
     
-                        <CarouselOffer/>
+                    <CarouselOffer/>
 
-                        <Text style={styles.headings}>Global Brand Deals</Text>
-                        <GlobalBrands/>
-                        
-                        <Text style={styles.headings}>Unbeatable Brand Deals</Text>
-                        <BrandDeals/>
+                    <Text style={styles.headings}>Global Brand Deals</Text>
+                    <GlobalBrands/>
                     
-                    </ScrollView>
+                    <Text style={styles.headings}>Unbeatable Brand Deals</Text>
+                    <BrandDeals/>
+                
+                </ScrollView>
                 
             </View>
 
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -59,8 +46,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
-        width:'100%',
-        
+        width:'100%',     
     },
     body: {
         paddingBottom: 20,
@@ -73,7 +59,7 @@ const styles = StyleSheet.create({
         paddingBottom:5,
         paddingHorizontal:30
     }
-})
+});
 
 
 
@@ -86,19 +72,3 @@ const styles = StyleSheet.create({
 
 
 
-
-                        {/* <Searchbar/>
-                     
-                        <CarouselOffer />
-                    
-                        <Image source={require("../assets/headings/shopByCategory.webp")} style={styles.categories} />
-
-                        <Categories  onPressCategory={(categoryId) => console.log("Category ID:", categoryId)} />
-                      
-                        <Image source={require("../assets/headings/grandGlobalBrand.webp")} style={styles.categories} />
-                      
-                        <GlobalBrands/>
-
-                        <Image source={require("../assets/headings/unbeatableBrandDeal.webp")} style={styles.categories} />
-                        
-                        <BrandDeals/> */}

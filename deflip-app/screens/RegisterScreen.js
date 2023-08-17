@@ -1,35 +1,66 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RegisterScreen = () => {
+
+  const [fname, setFName] = useState('');
+  const [lname, setLName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
+
+  const handleRegister = async () => {
+
+    const user = {
+      firstName: fname,
+      lastName: lname,
+      phone,
+      email,
+      password,
+    }
+
+    try{
+      const { data } = await axios.post("http://localhost:4000/user/signup", user)
+      console.log(data);
+      const token = data.token;
+      AsyncStorage.setItem("authToken", token);
+      navigation.replace("Main");
+
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
+
       <Image
         style={styles.regImg}
         source={require("../assets/images/register.png")}
       />
-      <Text style={styles.register}>Register</Text>
-      <TextInput style={styles.input} placeholder="First Name" />
-      <TextInput style={styles.input} placeholder="Last Name" />
-      <TextInput style={styles.input} placeholder="Email" />
-      <TextInput style={styles.input} placeholder="Phone No" />
-      <TextInput style={styles.input} password placeholder="Password" />
 
-      <TouchableOpacity style={styles.registerBtn} onPress={() => {}}>
+      <Text style={styles.register}>Register</Text>
+      <TextInput style={styles.input} placeholder="First Name" value={fname} onChangeText={setFName} />
+      <TextInput style={styles.input} placeholder="Last Name" value={lname} onChangeText={setLName} />
+      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
+      <TextInput style={styles.input} placeholder="Phone No"value={phone} onChangeText={setPhone}  />
+      <TextInput style={styles.input} password placeholder="Password" value={password} secureTextEntry={true}
+ onChangeText={setPassword}/>
+
+      <TouchableOpacity style={styles.registerBtn} onPress={handleRegister}>
         <Text style={styles.registerTxt}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}}>
+
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.loginTxt}>Already have a account? Login</Text>
       </TouchableOpacity>
-    </View>
+
+    </SafeAreaView>
   );
 };
 
@@ -47,7 +78,7 @@ const styles = StyleSheet.create({
   },
   regImg: {
     height: "30%",
-    width: "100%",
+    width: "80%",
     resizeMode: "contain",
     // backgroundColor:'black',
   },
@@ -77,7 +108,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
   loginTxt:{
-    fontSize:13,
+    fontSize:15,
     color:"rgba(60,9,108,1)",
   }
 });

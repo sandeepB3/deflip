@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/Searchbar";
 import axios from 'axios';
-
+import { SafeAreaView } from "react-native-safe-area-context";
 const ProductList = () => {
   const [data, setData] = useState([]);
   const [oldData, setOldData] = useState([]);
@@ -56,7 +56,7 @@ const ProductList = () => {
   const renderCard = ({ item }) => <ProductCard item={item} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.body}>
         <ScrollView
           vertical={true}
@@ -192,7 +192,7 @@ const ProductList = () => {
           </Modal>
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, AsyncStorage } from "react-native";
+import { Text, AsyncStorage, StyleSheet } from "react-native";
 import { Provider } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Layout from "./screens/Layout.js";
@@ -14,25 +14,14 @@ import LoginScreen from "./screens/LoginScreen.js";
 import RegisterScreen from "./screens/RegisterScreen.js";
 import TransactionScreen from "./screens/TransactionScreen.js";
 import FavouriteScreen from "./screens/Favourite.js";
+import StackNavigator from "./navigation/StackNavigator.js";
 
 export default App = () => {
-  // const [appIsReady, setAppIsReady] = useState(false);
-
   return (
-    // <SafeAreaView>
-    //   {/* <Provider store={store} > */}
-    //     {/* <Layout /> */}
-    //     <RedeemScreen/>
-    //   {/* </Provider> */}
-    // </SafeAreaView>
-
-    // <ProductDetails></ProductDetails>
     <>
-    <StatusBar hidden backgroundColor="white" />
-    <HomeScreen/>
-    {/* <ProductDetails></ProductDetails> */}
-  
+      <StackNavigator />
     </>
   );
 
 }
+
