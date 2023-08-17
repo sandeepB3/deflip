@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Text, SafeAreaView } from 'react-native';
 
 
 const WelcomeScreen = () => {
     return (
-        <Text>
-            WelcomeScreen
-        </Text>
-    )
+        <SafeAreaView style={styles.container}>
+            <Text>
+                WelcomeScreen
+            </Text>
+        </SafeAreaView>
+    );
 }
 
 export default WelcomeScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center'
+    }
+})

@@ -13,7 +13,7 @@ import {
   View,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import Entypo from "react-native-vector-icons/Entypo";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -81,7 +81,7 @@ const id=1;
   // };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         width: "100%",
         height: "100%",
@@ -247,7 +247,7 @@ const id=1;
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

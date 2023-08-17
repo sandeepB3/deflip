@@ -1,31 +1,56 @@
-import React, { useState } from "react";
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { useState } from "react";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const LoginScreen = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
+
+  const handleLogin = async () => {
+    try{
+      const { data } = await axios.post("http://localhost:4000/user/signin", {email, password})
+      console.log(data);
+      const token = data.token;
+      AsyncStorage.setItem("authToken", token);
+      navigation.replace("Main");
+
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
+
+      <Image
+        style={styles.logo}
+        source={require("../assets/images/chainkart.png")}
+      />
+
       <Image
         style={styles.loginImg}
         source={require("../assets/images/login.png")}
       />
       <Text style={styles.login}>Login In</Text>
-      <TextInput style={styles.input} placeholder="Email" />
-      <TextInput style={styles.input} password placeholder="Password" />
-      <TouchableOpacity style={styles.loginBtn} onPress={() => {}}>
+
+      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail}/>
+      <TextInput style={styles.input} password placeholder="Password" value={password} secureTextEntry={true}
+ onChangeText={setPassword}/>
+
+      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginTxt}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity  onPress={() => {}}>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text style={styles.registerTxt}>Do not have a account? Register</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -35,11 +60,18 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 20
+  },
+  logo: {
+    height: "17.95%",
+    width: "80%",
+    resizeMode: "contain",
   },
   login: {
     fontSize: 25,
     fontWeight: "600",
     letterSpacing: 1,
+    marginTop: 10
   },
   loginImg: {
     height: "30%",
@@ -73,8 +105,9 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
   registerTxt:{
-    fontSize:13,
+    fontSize:16,
     color:"rgba(60,9,108,1)",
+
   }
 });
 

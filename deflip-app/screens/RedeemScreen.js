@@ -121,7 +121,7 @@ const RedeemScreen = () => {
   };
 
   return (
-    <View style={styles.maincontainer}>
+    <SafeAreaView style={styles.maincontainer}>
       <View style={styles.topbar}>
         <View style={styles.topLeft}>
           <TouchableOpacity
@@ -170,7 +170,7 @@ const RedeemScreen = () => {
       </View>
 
       {renderContent()}
-    </View>
+    </SafeAreaView>
   );
 };
 
