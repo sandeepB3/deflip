@@ -60,3 +60,14 @@ export const sendTopCustomerTokens = async (req, res) => {
     res.status(500).send('Internal server error');
   }
 };
+
+export const tokenBalance = async(supplierName) => {
+
+  try{
+    const tokens = await kartInstance.methods.checkBalance(supplierName).call();
+    return tokens.toString();
+
+  }catch(err){
+    console.log(err);
+  }
+}

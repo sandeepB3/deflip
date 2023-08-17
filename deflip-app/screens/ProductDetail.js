@@ -43,10 +43,10 @@ const ProductDetails = () => {
   const [item, setItem] = useState([]);
 const id=1;
   useEffect(() => {
-    axios.get(`http://192.168.13.68:8000/product/details/3`)
+    axios.get(`http://192.168.13.168:8000/product/details/3`)
       .then((response) => {
         console.log(response.data.product);
-        setItem(response.data.product);
+        setItem(response.data.product[0]);
       })
       .catch((err)=>{
         
@@ -79,7 +79,7 @@ const id=1;
   //     console.error("Error adding to Wishlist:", error);
   //   }
   // };
-
+// console.log("Product data : ",item);
   return (
     <SafeAreaView
       style={{

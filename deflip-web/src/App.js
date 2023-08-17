@@ -9,14 +9,12 @@ function App() {
   return (
     <AuthState>
       <BrowserRouter>
-
         <Routes>
           <Route path="/" element={<Screen />} />
           <Route path="/login" element={<Signin />}/> 
           <Route path="/register" element={<Signup />}/>
           <Route path="/addItem" element={<AddItemForm />}/>
         </Routes>
-
       </BrowserRouter>
     </AuthState>
   );

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const queryAsync = promisify(db.query).bind(db);
-import { deploySellerContract, sendSupplierTokens } from '../helper/SellerContract.js';
+import { deploySellerContract, sendSupplierTokens,tokenBalance } from '../helper/SellerContract.js';
 
 export const addSupplier = async (req, res) => {
     try {
@@ -196,13 +196,21 @@ export const loadData = async (req, res, next) => {
       const topCustomers = await queryAsync(topCustomersQuery, [supplierID]);
 
       const supplierQuery = `SELECT * FROM SUPPLIER WHERE supplierId = ?`;
+
       const supplier = await queryAsync(supplierQuery, [supplierID]);
+      console.log(supplier);
+
+      const balance = await tokenBalance(supplier[0].supplierName);
+      console.log(balance)
+
       res.status(200).send({
         message: 'Data Loaded',
         products,
         topCustomers,
         supplier,
+        balance
       });
+
     }catch (error) {
       console.error(error);
       res.status(500).send('Internal server error');

@@ -25,7 +25,7 @@ const RegisterScreen = () => {
     }
 
     try{
-      const { data } = await axios.post("http://localhost:4000/user/signup", user)
+      const { data } = await axios.post("http://192.168.13.168:8000/user/signup", user)
       console.log(data);
       const token = data.token;
       AsyncStorage.setItem("authToken", token);

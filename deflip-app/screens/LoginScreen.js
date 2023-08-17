@@ -14,7 +14,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try{
-      const { data } = await axios.post("http://localhost:4000/user/signin", {email, password})
+      const { data } = await axios.post("http://192.168.13.168:8000/user/signin", {email, password})
       console.log(data);
       const token = data.token;
       AsyncStorage.setItem("authToken", token);
@@ -39,7 +39,7 @@ const LoginScreen = () => {
       />
       <Text style={styles.login}>Login In</Text>
 
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail}/>
+      <TextInput style={styles.input} placeholder="Email"  keyboardType="email-address" value={email} onChangeText={setEmail}/>
       <TextInput style={styles.input} password placeholder="Password" value={password} secureTextEntry={true}
  onChangeText={setPassword}/>
 

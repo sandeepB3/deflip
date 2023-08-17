@@ -28,7 +28,7 @@ const loadAllProducts = async()=>{
   console.log(auth.state.products)
   
   toggleView('ALL')
-  axios.get(`http://localhost:4000/product/allProducts/${auth.state.supplier.supplierID}`,{
+  axios.get(`http://localhost:8000/product/allProducts/${auth.state.supplier.supplierID}`,{
     
     
     }).then((response)=>{

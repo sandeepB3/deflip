@@ -13,9 +13,14 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/Searchbar";
-import axios from 'axios';
+import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-const ProductList = () => {
+import { useRoute } from "@react-navigation/native";
+
+const ProductList = ( {route} ) => {
+
+  const { cat } = route.params;
+
   const [data, setData] = useState([]);
   const [oldData, setOldData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(0);
@@ -23,21 +28,25 @@ const ProductList = () => {
   const searchRef = useRef();
 
   useEffect(() => {
-    axios.get("https://192.168.13.168:8000/product/electronics")
+    console.log("Passed Category: ", cat);
+    axios
+      .get(`http://192.168.13.168:8000/product/${cat}`)
       .then((response) => {
-        console.log("Hiiii")
         console.log(response.data.products);
         setData(response.data.products);
         setOldData(response);
       })
-      .catch((err)=>{
+      .catch((err) => {
+        console.log("Error");
+        
         console.log(err);
-      })
+      });
   }, []);
 
   const handlePressFilter = () => {
     setVisible(true);
   };
+  
   const handlePressSearch = () => {};
 
   const searchFilterFunction = (text) => {
@@ -70,7 +79,7 @@ const ProductList = () => {
 
           <View style={styles.filterBar}>
             <Text style={styles.itemFound}>
-              <Text style={{ fontWeight: "800" }} >{20}</Text> items found
+              <Text style={{ fontWeight: "800" }}>{20}</Text> items found
             </Text>
             <TouchableOpacity style={styles.filter} onPress={handlePressFilter}>
               <Text>Filter</Text>
@@ -121,7 +130,7 @@ const ProductList = () => {
                   onPress={() => {
                     setSelectedFilter(1);
                     const strAscending = data.sort((a, b) =>
-                      a.title > b.title ? 1 : -1
+                      a.produc > b.title ? 1 : -1
                     );
                     setData(strAscending);
                     setVisible(false);
@@ -142,7 +151,7 @@ const ProductList = () => {
                   }}
                   onPress={() => {
                     setSelectedFilter(2);
-                    setData(data.sort((a, b) => a.price - b.price));
+                    setData(data.sort((a, b) => a.cost - b.cost));
                     setVisible(false);
                   }}
                 >
@@ -160,7 +169,7 @@ const ProductList = () => {
                   }}
                   onPress={() => {
                     setSelectedFilter(3);
-                    setData(data.sort((a, b) => b.price - a.price));
+                    setData(data.sort((a, b) => b.cost - a.cost));
                     setVisible(false);
                   }}
                 >
@@ -168,7 +177,7 @@ const ProductList = () => {
                     Hight to Low Price
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={{
                     width: "100%",
                     height: 50,
@@ -186,7 +195,7 @@ const ProductList = () => {
                     {" "}
                     Sort By Rating
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
           </Modal>

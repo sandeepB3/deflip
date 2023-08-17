@@ -149,3 +149,35 @@ export const getProductsByCategory = async (req, res) => {
     });
   }
 };
+export const getProductDetails = async (req, res) => {
+  try {
+    
+    const { productID } = req.params;
+    console.log(productID)
+    db.query(`SELECT * FROM PRODUCT WHERE productID = ?`, [productID], async (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send({
+          status_code: 500,
+          message: 'An error occurred',
+          error: err,
+        });
+      }
+
+      if (result) {
+        res.send({
+          status_code: 200,
+          message: 'Data Returned',
+          product: result,
+        });
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      status_code: 500,
+      message: 'Internal server error',
+      error: err,
+    });
+  }
+};
