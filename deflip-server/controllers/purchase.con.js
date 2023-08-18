@@ -47,6 +47,7 @@ export const purchaseCart = async (req, res) => {
       console.log(balance)
       
       await publishNotification(`You just made a purchase of ${total} and were awarded ${tokens} for it!`,userID)
+      
       res.send({
           status: 'Purchase Added',
           status_code: 200,

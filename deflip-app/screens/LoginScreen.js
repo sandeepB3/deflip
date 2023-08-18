@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+const URL = 'localhost';
 
 const LoginScreen = () => {
 
@@ -14,7 +14,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try{
-      const { data } = await axios.post("http://192.168.13.168:8000/user/signin", {email, password})
+      const { data } = await axios.post(`http://${URL}:8000/user/signin`, {email, password})
       console.log(data);
       const token = data.token;
       AsyncStorage.setItem("authToken", token);
