@@ -23,7 +23,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { addToCart } from "../localStorage/addToCart";
 import { addToWishlist } from "../localStorage/addToWishlist";
 import axios from 'axios';
-
+const URL = 'localhost';
 
 
 const COLOURS = {
@@ -41,18 +41,18 @@ const COLOURS = {
 
 const ProductDetails = () => {
   const [item, setItem] = useState([]);
-const id=1;
-  useEffect(() => {
-    axios.get(`http://192.168.13.168:8000/product/details/3`)
-      .then((response) => {
-        console.log(response.data.product);
-        setItem(response.data.product[0]);
-      })
-      .catch((err)=>{
-        
-        console.log(err);
-      })
-  }, []);
+  const id=1;
+    useEffect(() => {
+      axios.get(`http://${URL}:8000/product/details/3`)
+        .then((response) => {
+          console.log(response.data.product);
+          setItem(response.data.product[0]);
+        })
+        .catch((err)=>{
+          
+          console.log(err);
+        })
+    }, []);
 
 
   // const addToFavourite = async () => {

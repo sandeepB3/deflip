@@ -14,13 +14,13 @@ const kartContractABI = KartABI.abi;
 const sellerContractABI = SellerABI.abi;
 const userContractABI = UserABI.abi;
 
-const tokenContractAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
-const kartContractAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+const tokenContractAddress = "0x638e2d5F06EF597FB4a86977d3E20D0950aDC245";
+const kartContractAddress = "0x0E08bFBBa5E9E5d2BaD3d0dB65B6dD91CECdc6DB";
 
 let userContractAddress = ''; //Function to retrive
 let sellerContractAddress = ''; //Function to retrive
 
-const PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+const PRIVATE_KEY = "d7d4b519da331fe50a825f883347a5084f915b1d7a524cce93a57f2f7ba74840";
 const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
 web3.eth.accounts.wallet.add(account);
 

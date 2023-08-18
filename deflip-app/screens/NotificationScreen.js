@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet,Dimensions,Image,View, Text, SafeAreaView ,TouchableOpacity} from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+const URL = 'localhost';
 
 const NotificationScreen = () => {
     const navigation = useNavigation();
+
+    useEffect(() => {
+        axios.get(`http://${URL}:8000/notification/fetch/37`)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>

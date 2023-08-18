@@ -16,6 +16,7 @@ import SearchBar from "../components/Searchbar";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute } from "@react-navigation/native";
+const URL = 'localhost';
 
 const ProductList = ( {route} ) => {
 
@@ -30,7 +31,7 @@ const ProductList = ( {route} ) => {
   useEffect(() => {
     console.log("Passed Category: ", cat);
     axios
-      .get(`http://192.168.13.168:8000/product/${cat}`)
+      .get(`http://${URL}:8000/product/${cat}`)
       .then((response) => {
         console.log(response.data.products);
         setData(response.data.products);

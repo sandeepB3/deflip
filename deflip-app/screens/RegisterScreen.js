@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const URL = 'localhost';
 
 const RegisterScreen = () => {
 
@@ -25,7 +26,7 @@ const RegisterScreen = () => {
     }
 
     try{
-      const { data } = await axios.post("http://192.168.13.168:8000/user/signup", user)
+      const { data } = await axios.post(`http://${URL}:8000/user/signup`, user)
       console.log(data);
       const token = data.token;
       AsyncStorage.setItem("authToken", token);

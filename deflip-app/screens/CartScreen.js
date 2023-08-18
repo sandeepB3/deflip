@@ -13,7 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+const URL = 'localhost'
 
 const COLOURS = {
   white: "#ffffff",
@@ -46,10 +46,10 @@ const CartScreen = () => {
       };
     });
     console.log("Order:",product);
-    await axios.post("http://192.168.13.168:8000/purchase/cart",{
-      items:order,
-      total : total,
-      userID : 37
+    await axios.post(`http://${URL}:8000/purchase/cart`,{
+      items: order,
+      total: total,
+      userID: 38
     })
   }
 
