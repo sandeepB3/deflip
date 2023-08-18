@@ -4,7 +4,9 @@ import axios from "axios";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-const URL = 'localhost';
+// const URL = '192.168.13.201'; // Rohan Wifi
+const URL = '192.168.205.18'
+// const URL = 'localhost'
 
 const LoginScreen = () => {
 

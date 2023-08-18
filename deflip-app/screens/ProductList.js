@@ -15,9 +15,10 @@ import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/Searchbar";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRoute } from "@react-navigation/native";
-const URL = 'localhost';
 
+// const URL = '192.168.13.201'; // Rohan Wifi
+const URL = '192.168.205.18'
+// const URL = 'localhost'
 const ProductList = ( {route} ) => {
 
   const { cat } = route.params;

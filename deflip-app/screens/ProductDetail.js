@@ -23,8 +23,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { addToCart } from "../localStorage/addToCart";
 import { addToWishlist } from "../localStorage/addToWishlist";
 import axios from 'axios';
-const URL = 'localhost';
-
+// const URL = '192.168.13.201'; // Rohan Wifi
+const URL = '192.168.205.18'
+// const URL = 'localhost'
 
 const COLOURS = {
   white: "#ffffff",
