@@ -40,9 +40,10 @@ const CartScreen = () => {
   const placeOrder = async() =>{
     const order= product.map(item => {
       return {
-      userID:6,
         productID: item.productID,
-        quantity: item.quantity
+        quantity: item.quantity,
+        seller:item.supplierID,
+        cost:item.cost
       };
     });
     console.log("Order:",product);

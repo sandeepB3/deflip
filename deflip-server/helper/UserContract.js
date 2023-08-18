@@ -14,7 +14,7 @@ export const deployUserContract = async (username) => {
       
     } catch(err){
       console.log(err);
-      res.status(404).json({message: 'Error deploying user'});
+      // res.status(404).json({message: 'Error deploying user'});
     }
 }
 

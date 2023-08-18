@@ -115,7 +115,7 @@ export const getProfile = async (req, res) => {
 export const getOrders = async (req, res, next) => {
     try {
         const { userID } = req.params;
-        const ordersQuery = `SELECT * FROM ORDERS WHERE userID = ?`;
+        const ordersQuery = `SELECT * FROM ORDERS WHERE userID = ? ORDER BY orderDate DESC`;
         const orders = await queryAsync(ordersQuery, [userID]);
         
         res.status(200).send({
