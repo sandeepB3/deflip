@@ -46,12 +46,11 @@ const CartScreen = () => {
       };
     });
     console.log("Order:",product);
-    await axios.post("http://192.168.13.68:8000/purchase/cart",{
+    await axios.post("http://192.168.13.168:8000/purchase/cart",{
       items:order,
       total : total,
-      userID : 9
+      userID : 37
     })
-    setOrder([]);
   }
 
   useEffect( () => {

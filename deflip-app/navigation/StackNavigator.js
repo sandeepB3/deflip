@@ -7,6 +7,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import BottomNavigator from './TabNavigator';
 import CartScreen from '../screens/CartScreen';
+import ProductList from '../screens/ProductList';
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -14,11 +15,13 @@ const StackNavigator = () => {
         <NavigationContainer>
             <Stack.Navigator>
 
-                {/* <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-                <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/> */}
+                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
 
                 <Stack.Screen name="Main" component={BottomNavigator} options={{headerShown: false}}/>
+                <Stack.Screen name="ProductList" component={ProductList} options={{headerShown: false}}/>
                 <Stack.Screen name="Cart" component={CartScreen} options={{headerShown: false}} />
+                
 
             </Stack.Navigator>
         </NavigationContainer>

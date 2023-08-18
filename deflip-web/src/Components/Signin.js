@@ -27,6 +27,7 @@ const SignIn = () => {
         supplier:response.data.supplier,
         products:auth.state.products,
         topCustomers:auth.state.topCustomers,
+        Authorization:`Bearer ${response.data.token}`
       })
       localStorage.setItem('token',response.data.token)
       navigate("/")

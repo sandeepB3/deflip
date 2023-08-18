@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export const verifySupplierToken = (req, res, next) => {
   let token = null; 
-  console.log(req.headers)
+  console.log(req.headers.authorization)
   if (req.headers.authorization) {
     const authHeaderVal = req.headers.authorization;
     token = authHeaderVal.split(' ')[1];
