@@ -6,9 +6,10 @@ const AuthState = (props) => {
     const user = {
         isLoggedIn: false,
         supplier: {},
+        statistics:{},
         products: [],
         topCustomers: [],
-        Authorization: ''
+        Authorization: '',
     }
 
     const [state, setState] = useState(user)

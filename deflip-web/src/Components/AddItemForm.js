@@ -4,8 +4,10 @@ import "./AddItemForm.css"; // Import your custom CSS for styling
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 const AddItemForm = () => {
+  
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
+  console.log(auth.state)
   const [itemName, setItemName] = useState("");
   const [category, setCategory] = useState("");
   const [itemPrice, setItemPrice] = useState(0);

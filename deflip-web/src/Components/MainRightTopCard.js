@@ -1,6 +1,8 @@
-import React from "react";
+import {React,useContext} from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 function MainRightTopCard() {
+  const auth=useContext(AuthContext)
   return (
     <div className="topCard">
       <div className="topCard_name">
@@ -10,23 +12,20 @@ function MainRightTopCard() {
 
       <div className="earning">
         <p>
-          Products Sold <span>187</span>
+          Total Units Sold<span>{auth.state.statistics?.unitSold}</span>
         </p>
 
         <p>
           Customers Acquired <span>5</span>
         </p>
 
+
         <p>
-          Products Returned <span>25</span>
+          Products Hosted <span>{auth.state.statistics?.productsHosted}</span>
         </p>
 
         <p>
-          Products Hosted <span>200</span>
-        </p>
-
-        <p>
-          Revenue Generated <span>262 ETH</span>
+          Revenue Generated <span>{auth.state.statistics?.revenue}</span>
         </p>
       </div>
     </div>
