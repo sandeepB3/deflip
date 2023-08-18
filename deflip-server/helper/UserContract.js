@@ -7,7 +7,7 @@ export const deployUserContract = async (username) => {
       transaction.gasLimit = gasLimit;
 
       const userContractDetails = await kartInstance.methods.deployUserContract(username).send(transaction);
-      console.log(userContractDetails);
+      // console.log(userContractDetails);
   
       const userAddress = await kartInstance.methods.deployedContracts(username).call();
       return userAddress;
@@ -18,14 +18,14 @@ export const deployUserContract = async (username) => {
     }
 }
 
-export const sendUserTokens = async (username, val) => {
-
+export const sendUserTokens = async (email, val) => {
+  const [username, domain] = email.split('@');
   try{
     const gasLimit = await kartInstance.methods.transferToken(username, val).estimateGas(); 
     transaction.gasLimit = gasLimit;
 
     const transferDetails = await kartInstance.methods.transferToken(username, val).send(transaction);
-    console.log(transferDetails);
+    // console.log(transferDetails);
 
     const tokens = await kartInstance.methods.checkBalance(username).call();
     return tokens.toString();
@@ -42,7 +42,7 @@ export const sendAdminTokens = async (username, val) => {
     transaction.gasLimit = gasLimit;
 
     const transferDetails = await kartInstance.methods.transferBack(username, val).send(transaction);
-    console.log(transferDetails);
+    // console.log(transferDetails);
 
     const tokens = await kartInstance.methods.transferBack(username).call();
     return tokens.toString();
@@ -51,3 +51,15 @@ export const sendAdminTokens = async (username, val) => {
     console.log(err);
   }
 };
+
+export const tokenBalance = async (email) => {
+  const [username, domain] = email.split('@');
+
+  try{
+    const tokens = await kartInstance.methods.checkBalance(username).call();
+    return tokens.toString();
+
+  }catch(err){
+    console.log(err);
+  }
+}

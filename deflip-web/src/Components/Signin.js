@@ -15,7 +15,7 @@ const SignIn = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-       const response= await axios.post('http://localhost:4000/supplier/login',{
+       const response= await axios.post('http://localhost:8000/supplier/login',{
           supplierName,
           password,
       })
@@ -27,6 +27,7 @@ const SignIn = () => {
         supplier:response.data.supplier,
         products:auth.state.products,
         topCustomers:auth.state.topCustomers,
+        Authorization:`Bearer ${response.data.token}`
       })
       localStorage.setItem('token',response.data.token)
       navigate("/")
