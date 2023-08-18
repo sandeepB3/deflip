@@ -3,7 +3,7 @@ import { getNotifications } from '../controllers/notification.con.js'
 
 const router = express.Router( {mergeParams:true} )
 
-// router.post('/make', makePurchase)
-router.post('/fetch', getNotifications)
+
+router.post('/fetch/:userID', getNotifications)
 
 export default router;

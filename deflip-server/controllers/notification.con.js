@@ -1,6 +1,6 @@
-import db from '../utils/db'
+import {db} from '../utils/db.js'
 export const publishNotification=async (message,userID)=>{
-    db.query('INSERT INTO NOIFICATION(publishedTo,content,createdAt',[userID,message,new Date()])
+    db.query('INSERT INTO NOTIFICATION(publishedTo,content,createdAt) VALUES (?,?,?)',[userID,message,new Date()])
 }
 
 export const getNotifications=async(req,res)=>{
