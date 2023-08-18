@@ -1,14 +1,7 @@
-import {React,useContext,useState} from "react";
+import React, { useContext,useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import "./MainContainer.css";
 import Banner from "../img/1.jpg";
-import CardMain from "./CardMain";
-import Card1 from "../img/card1.jpg";
-import Card2 from "../img/card2.jpg";
-import Card3 from "../img/card3.jpg";
-import Card4 from "../img/card4.jpg";
-import Card5 from "../img/card5.jpg";
-import Card6 from "../img/card6.jpg";
 import MainRightTopCard from "./MainRightTopCard";
 import MainRightBottomCard from "./MainRightBottomCard";
 import AllProducts from "./allProducts";
@@ -16,22 +9,24 @@ import AddItemForm from "./AddItemForm";
 import axios from "axios";
 
 function MainContainer() {
+  const auth = useContext(AuthContext)
+  const [activeTab, setActiveTab]=useState('All')
+  console.log(activeTab)
 
-const auth = useContext(AuthContext)
-const [activeTab,setActiveTab]=useState('All')
-console.log(activeTab)
-// const handleTabClick = (tabId) => {
-//   setActiveTab(tabId);
-// };
-const [showAll, setShowAll]= useState(true);
-const [showAdd, setShowAdd] = useState(false);
+  const [showAll, setShowAll]= useState(true);
+  const [showAdd, setShowAdd] = useState(false);
 
-const toggleView = (view) => {
-  setShowAll(view === 'ALL');
-  setShowAdd(view === 'ADD');
-};
-const loadAllProducts=async()=>{
-  console.log(auth.state.supplier.supplierID)
+  const toggleView = (view) => {
+    setShowAll(view === 'ALL');
+    setShowAdd(view === 'ADD');
+  }
+
+const loadAllProducts = async()=>{
+
+  console.log(auth.state.supplier)
+  console.log(auth.state.topCustomers)
+  console.log(auth.state.products)
+  
   toggleView('ALL')
   axios.get(`http://localhost:8000/product/allProducts/${auth.state.supplier.supplierID}`,{
     
@@ -46,7 +41,6 @@ const loadAllProducts=async()=>{
 
       })
     })
-   
 }
 // console.log("hi")
 // console.log(auth)

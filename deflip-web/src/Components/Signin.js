@@ -21,7 +21,7 @@ const SignIn = () => {
       })
       setSupplierName('')
       setPassword('')
-      if(response.status==200){
+      if(response.status === 200){
         auth.setState({
         isLoggedIn:true,
         supplier:response.data.supplier,

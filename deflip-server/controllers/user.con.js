@@ -7,31 +7,26 @@ import { deployUserContract } from '../helper/UserContract.js';
 
 export const registerUser = async (req, res, next) => {
     try {
-        const { firstName, lastName, phone, emailID, password } = req.body;
+        const { firstName, lastName, phone, email, password } = req.body;
         const saltRounds = 10;
         const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
         //Web3 Call
-        const [username, domain] = emailID.split('@');
+        const [username, domain] = email.split('@');
         const userAddress = await deployUserContract(username)
         console.log(userAddress)
-    
-        db.query(
+
+        const result = await queryAsync(
             `INSERT INTO USERS(firstName, lastName, phNO, emailID, password, contractAdd) VALUES (?,?,?,?,?,?)`,
-            [firstName, lastName, phone, emailID, encryptedPassword, userAddress]
+            [firstName, lastName, phone, email, encryptedPassword, userAddress]
         );
 
-        let data = null;
-        db.query(`SELECT * FROM USERS WHERE emailID = ?`, [emailID], async (err, result) => {
-            data = result[0];
-        });
-
         const user = {
-            user_id: data.userID,
-            name: data.firstName + " " + data.lastName,
-            phone: data.phNO,
-            email: data.emailID,
-            contract: data.contractAdd
+            user_id: result.insertId,
+            name: firstName + " " + lastName,
+            phone: phone,
+            email: email,
+            contract: userAddress
         }
 
         const accessToken = jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
@@ -57,9 +52,9 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
     try {
-        const { emailID, password } = req.body;
+        const { email, password } = req.body;
 
-        db.query(`SELECT * FROM USERS WHERE emailID=?`, [emailID], async (err, result) => {
+        db.query(`SELECT * FROM USERS WHERE emailID=?`, [email], async (err, result) => {
         if (err) {
             console.error(err);
             res.status(400).send({

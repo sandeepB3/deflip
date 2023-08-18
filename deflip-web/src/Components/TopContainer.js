@@ -5,6 +5,7 @@ import women from "../img/women.jpg";
 
 function TopContainer() {
   useEffect(() => {
+
     const mouseTarget = document.getElementById("menuChevron");
     const menuContainer = document.getElementById("menuContainer");
     mouseTarget.addEventListener("mouseenter", () => {
@@ -34,7 +35,7 @@ function TopContainer() {
         <div className="profileImage">
           <img src={women} alt="" />
         </div>
-        <p className="profileName">Olivia Christine</p>
+        <p className="profileName">Laukik Patade</p>
         <i className="menuChevron" id="menuChevron">
           <FaChevronDown />
         </i>

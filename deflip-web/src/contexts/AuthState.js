@@ -1,17 +1,20 @@
 import { AuthContext } from "./AuthContext";
-import React, {useState} from "react";
-const AuthState=(props)=>{
-    const s1 = {
-        isLoggedIn:false,
-        supplier:{},
-        products:[],
-        topCustomers:[],
-        token:"",
+import React, { useState } from "react";
+
+const AuthState = (props) => {
+
+    const user = {
+        isLoggedIn: false,
+        supplier: {},
+        products: [],
+        topCustomers: [],
+        Authorization: ''
     }
-    const [state,setState]=useState(s1)
+
+    const [state, setState] = useState(user)
     
     return (
-        <AuthContext.Provider value={{state,setState}}>
+        <AuthContext.Provider value = { {state, setState} }>
             {props.children}
         </AuthContext.Provider>
     )
