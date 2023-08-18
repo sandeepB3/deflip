@@ -4,7 +4,9 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const URL = 'localhost';
+// const URL = '192.168.13.201'; // Rohan Wifi
+const URL = '192.168.205.18'
+// const URL = 'localhost'
 
 const RegisterScreen = () => {
 

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet,Dimensions,Image,View, Text, SafeAreaView ,TouchableOpacity} from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
-const URL = 'localhost';
+// const URL = '192.168.13.201'; // Rohan Wifi
+const URL = '192.168.205.18'
+// const URL = 'localhost'
 
 const NotificationScreen = () => {
     const navigation = useNavigation();
