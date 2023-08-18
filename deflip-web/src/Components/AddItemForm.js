@@ -20,7 +20,7 @@ const AddItemForm = () => {
     try{
       const formData = new FormData();
       formData.append('image', selectedFile);
-      axios.post('http://localhost:4000/product/add',{
+      axios.post('http://localhost:8000/product/add',{
         "productName":itemName,
         "cost":itemPrice,
         category,
@@ -30,7 +30,7 @@ const AddItemForm = () => {
         description
     }).then((res)=>{
       console.log(res.data.productID)
-const response= axios.post(`http://localhost:4000/product/addImage/${res.data.productID}`,formData)
+const response= axios.post(`http://localhost:8000/product/addImage/${res.data.productID}`,formData)
 console.log(res)
     })
     

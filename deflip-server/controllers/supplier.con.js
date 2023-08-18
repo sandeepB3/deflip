@@ -208,6 +208,7 @@ export const loadData = async (req, res, next) => {
 
     const supplierQuery = `SELECT * FROM SUPPLIER WHERE supplierId = ?`;
     const supplier = await queryAsync(supplierQuery, [supplierID]);
+    const balance = await kartInstance.methods.checkBalance(username).call();
     res.send({
       products,
       topCustomers,
