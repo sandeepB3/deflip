@@ -38,6 +38,8 @@ const loadAllProducts = async()=>{
         isLoggedIn:auth.state.isLoggedIn,
         supplier:auth.state.supplier,
         topCustomers:auth.state.topCustomers,
+      Authorization:auth.state.Authorization,
+      statistics:auth.state.statistics
 
       })
     })

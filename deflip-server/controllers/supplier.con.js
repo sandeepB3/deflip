@@ -182,7 +182,7 @@ export const loadData = async (req, res, next) => {
   try {
       const productsQuery = `SELECT * FROM PRODUCT WHERE supplierId = ?`;
       const products = await queryAsync(productsQuery, [supplierID]);
-
+      console.log(products.length)
       const topCustomersQuery = `
           SELECT U.userID, U.emailID, SUM(P.quantity) AS total_quantity_bought
           FROM USERS U
@@ -200,14 +200,21 @@ export const loadData = async (req, res, next) => {
       const supplier = await queryAsync(supplierQuery, [supplierID]);
       console.log(supplier);
 
+      
+
       const balance = await tokenBalance(supplier[0].supplierName);
-      console.log(balance)
+      
 
       res.status(200).send({
         message: 'Data Loaded',
         products,
         topCustomers,
-        supplier,
+        supplier:supplier[0],
+        statistics:{
+          unitSold:supplier[0].unitSold,
+          revenue:supplier[0].revenue,
+          productsHosted:products.length
+        },
         balance
       });
 

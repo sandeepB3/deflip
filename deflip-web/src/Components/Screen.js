@@ -24,11 +24,13 @@ async function fetchData(token, auth) {
 
     auth.setState({
       isLoggedIn: true,
-      supplier: response.data.supplier[0],
+      supplier: response.data.supplier,
       products: response.data.products,
       topCustomers: response.data.topCustomers,
       Authorization: `Bearer ${token}`,
+      statistics:response.data.statistics
     });
+    
   } catch (error) {
     console.error("Error fetching data:", error);
   }

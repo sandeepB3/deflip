@@ -2,7 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import Web3 from 'web3';
-const web3 = new Web3(process.env.QUICKNODE_KEY);
+// const web3 = new Web3(process.env.QUICKNODE_KEY);
+const web3 = new Web3('http://127.0.0.1:8545/');
 
 import TokenABI from './contractABI/ChainToken.json' assert { type: "json" };
 import KartABI from './contractABI/ChainKart.json' assert { type: "json" };
@@ -14,13 +15,15 @@ const kartContractABI = KartABI.abi;
 const sellerContractABI = SellerABI.abi;
 const userContractABI = UserABI.abi;
 
-const tokenContractAddress = "0x638e2d5F06EF597FB4a86977d3E20D0950aDC245";
-const kartContractAddress = "0x0E08bFBBa5E9E5d2BaD3d0dB65B6dD91CECdc6DB";
+const tokenContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const kartContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 let userContractAddress = ''; //Function to retrive
 let sellerContractAddress = ''; //Function to retrive
 
-const privateKey = `0x${process.env.PRIVATE_KEY}`;
+const privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+
+// const privateKey = `0x${process.env.PRIVATE_KEY}`;
 const account = web3.eth.accounts.privateKeyToAccount(privateKey);
 web3.eth.accounts.wallet.add(account);
 
