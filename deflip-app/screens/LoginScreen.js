@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-const URL = '192.168.13.100'; // Rohan Wifi
-// const URL = '192.168.205.18'
+// const URL = '192.168.13.100'; // Rohan Wifi
+const URL = '192.168.251.35'
 // const URL = 'localhost'
 import { useDispatch } from "react-redux";
 import { addUserInfo } from "../store/userSlice";
@@ -21,19 +21,71 @@ const LoginScreen = () => {
         email,
         password,
       });
-
+      
       console.log(data);
       const token = data.token;
-      AsyncStorage.setItem("authToken", token);
-
+      console.log("Token : ",token)
+      
+      await AsyncStorage.setItem("authToken", `"${token}`);
       // Dispatch action before navigation
+      console.log("Token setting : ",AsyncStorage.getItem("authToken"))
       dispatch(addUserInfo({ item: data.user }));
 
       navigation.replace("Main");
     } catch (err) {
       console.log(err);
     }
-  };
+  }
+
+  const fetchUserWithToken = async (token) => {
+    try {
+      const { data } = await axios.get(`http://${URL}:8000/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("Data:",data);
+      dispatch(addUserInfo({ item: data.data.user}));
+      navigation.replace("Main");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const checkTokenAndLogin = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+
+      if (token) {
+        await fetchUserWithToken(token);
+      } else {
+        handleLogin();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    // const fetchUser = async() => {
+    //   try{
+    //     console.log(AsyncStorage.getItem("authToken"));
+    //     const token = await AsyncStorage.getItem("authToken");
+    //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    //     if(token){
+    //       const { data } = await axios.post(`http://${URL}:8000/user/profile`);
+    //       dispatch(addUserInfo({ item: data.user }));
+    //       navigation.replace("Main");
+    //     }else{
+    //       handleLogin();
+    //     }
+    //   }catch(err){
+    //     console.log(err);
+    //   }   
+    // }
+    // fetchUser();
+    checkTokenAndLogin();
+  }, [])
+
+
   
   return (
     <SafeAreaView style={styles.mainContainer}>

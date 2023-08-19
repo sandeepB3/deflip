@@ -26,15 +26,16 @@ const SearchBar = ({bgColor, searchbgColor, cartColor}) => {
       left: 10,
       zIndex: 1,
       flex:6,
-  
+      alignItems:'center',
+      justifyContent:'center'
     },
     field: {
       backgroundColor: 'white',
       paddingLeft: spacing.xl + spacing.s,
       paddingRight: spacing.m,
-      paddingVertical: spacing.m,
+      // paddingVertical: spacing.m,
       borderRadius: 25,
-      height: 54,
+      height: 40,
       flex: 1,
       elevation: 20,
       shadowColor: '#52006A',
@@ -49,7 +50,7 @@ const SearchBar = ({bgColor, searchbgColor, cartColor}) => {
       borderRadius:50,
       backgroundColor: cartColor,
       zIndex: 1,
-      flex:2,
+      flex:1.5,
       display:'flex',
       alignItems:'center',
       justifyContent:'center'
@@ -63,7 +64,7 @@ const SearchBar = ({bgColor, searchbgColor, cartColor}) => {
       <View style={styles.inner}>
      <View  style={styles.searchsection}>
      <View style={styles.search} pointerEvents="none">
-          <Icon name="search" size={30} color="black"/>
+          <Icon name="search" size={25} color="black"/>
           </View>
           <TextInput
             style={styles.field}

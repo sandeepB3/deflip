@@ -8,7 +8,7 @@ const userSlice = createSlice({
     addUserInfo: (state, action) => {
       const { item } = action.payload;
       if (item) {
-        state.info = item; // Store user info in the 'info' field
+        state.info = item; 
       }
     },
   },

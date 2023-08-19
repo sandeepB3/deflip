@@ -6,19 +6,22 @@ import {
   View,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-const URL = '192.168.13.100'; // Rohan Wifi
-
+// const URL = '192.168.13.100'; // Rohan Wifi
+const URL = '192.168.251.35';
 const OrderDetails = ({route}) => {
   const { orderId } = route.params;
   const [data, setData] = useState([]);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   useEffect(() => {
     // console.log(item);
@@ -44,7 +47,9 @@ console.log(data);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topBar}>
-        <Entypo name="chevron-left" size={25} color="black" />
+        <TouchableOpacity style={{paddingRight:15}} onPress={()=>navigation.goBack()}>
+          <Entypo name="chevron-left" size={25} color="white"  />
+        </TouchableOpacity>
         <Text style={styles.topTxt}>Order Details</Text>
       </View>
       <ScrollView style={{ paddingHorizontal: 15, paddingVertical: 20 }}>
@@ -137,16 +142,17 @@ const styles = StyleSheet.create({
   topBar: {
     display: "flex",
     flexDirection: "row",
-    paddingHorizontal: 20,
     alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "rgba(60,9,108,0.2)",
+    backgroundColor: "rgba(60,9,108,1)",
+    padding: 20,
+    width: "100%",
   },
   topTxt: {
-    fontWeight: "500",
-    fontSize: 20,
-    padding: 10,
-    letterSpacing: 1,
+      fontSize: 20,
+      letterSpacing: 1,
+      color: "white",
+      fontWeight: "500",
+
   },
   box: {
     backgroundColor: "rgba(0,0,0,0.1)",

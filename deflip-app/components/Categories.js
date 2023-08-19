@@ -13,12 +13,10 @@ import categories from "../jsondata/category";
 import { useNavigation } from "@react-navigation/native";
 
 // const navigateToProductList = (category) => {
-//   console.log("Mens : ", category);
 //   navigation.navigate("ProductList", { cat: category });
 // };
 
 const CategoryItem = ({ category }) => {
-  // console.log("Category object : ", category.category)
   const navigation = useNavigation();
   return (
     <TouchableOpacity

@@ -43,8 +43,11 @@ export const sendAdminTokens = async (email, val) => {
 
     const transferDetails = await kartInstance.methods.transferBack(username, val).send(transaction);
     // console.log(transferDetails);
-
+    let balance = await tokenBalance(email);
+    console.log("Balance in send admin tokens : ",balance)
     const tokens = await kartInstance.methods.transferBack(username).call();
+    balance = await tokenBalance(email);
+    console.log(balance)
     return tokens.toString();
     
   } catch(err){
