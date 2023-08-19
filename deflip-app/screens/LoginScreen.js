@@ -4,29 +4,37 @@ import axios from "axios";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-// const URL = '192.168.13.201'; // Rohan Wifi
-const URL = '192.168.205.18'
+const URL = '192.168.13.100'; // Rohan Wifi
+// const URL = '192.168.205.18'
 // const URL = 'localhost'
-
+import { useDispatch } from "react-redux";
+import { addUserInfo } from "../store/userSlice";
 const LoginScreen = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const handleLogin = async () => {
-    try{
-      const { data } = await axios.post(`http://${URL}:8000/user/signin`, {email, password})
+    try {
+      const { data } = await axios.post(`http://${URL}:8000/user/signin`, {
+        email,
+        password,
+      });
+
       console.log(data);
       const token = data.token;
       AsyncStorage.setItem("authToken", token);
-      navigation.replace("Main");
 
-    }catch(err){
+      // Dispatch action before navigation
+      dispatch(addUserInfo({ item: data.user }));
+
+      navigation.replace("Main");
+    } catch (err) {
       console.log(err);
     }
-  }
-
+  };
+  
   return (
     <SafeAreaView style={styles.mainContainer}>
 

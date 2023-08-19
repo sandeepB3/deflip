@@ -12,7 +12,6 @@ export const getDataFromDB = async () => {
     return productData;
   
   } else {
-    setProduct(false);
-    getTotal(false);
+    console.log("No Items")
   }
 };
