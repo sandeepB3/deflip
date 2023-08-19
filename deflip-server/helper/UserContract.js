@@ -35,8 +35,8 @@ export const sendUserTokens = async (email, val) => {
   }
 };
 
-export const sendAdminTokens = async (username, val) => {
-
+export const sendAdminTokens = async (email, val) => {
+  const [username, domain] = email.split('@');
   try{
     const gasLimit = await kartInstance.methods.transferBack(username, val).estimateGas(); 
     transaction.gasLimit = gasLimit;
