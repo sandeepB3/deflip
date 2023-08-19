@@ -20,7 +20,7 @@ const AddItemForm = () => {
     e.preventDefault();
     try {
 
-      console .log(auth.state.Authorization)
+      console.log(auth.state.Authorization)
       const formData = new FormData();
       formData.append("image", selectedFile);
       axios
@@ -78,7 +78,7 @@ const AddItemForm = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      <div className="add-item-form">
+      <div className="add-item-form" >
         <h2>Add a New Item</h2>
         <form onSubmit={handleAddItem} style={{ alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>

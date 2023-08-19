@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import { FaBell, FaChevronDown } from "react-icons/fa";
-import women from "../img/women.jpg";
+import { FaCoins, FaChevronDown } from "react-icons/fa";
+import profile from "../img/profile.png";
+import { AuthContext } from "../contexts/AuthContext";
+
 
 function TopContainer() {
+  const auth = useContext(AuthContext);
+  console.log("This is auth", auth)
   useEffect(() => {
-
     const mouseTarget = document.getElementById("menuChevron");
     const menuContainer = document.getElementById("menuContainer");
     mouseTarget.addEventListener("mouseenter", () => {
@@ -29,23 +32,22 @@ function TopContainer() {
       </div>
 
       <div className="profileContainer">
-        <i className="profileIcon">
-          <FaBell />
+        <i className="">
+          <FaCoins />
         </i>
+        <h4 style={{ marginLeft: '10px', marginRight: '10px' }}>{auth.state.balance} Tokens</h4>
         <div className="profileImage">
-          <img src={women} alt="" />
+          <img src={profile} alt="" />
         </div>
-        <p className="profileName">Laukik Patade</p>
+        <p className="profileName">{auth.state.supplier.supplierName}</p>
         <i className="menuChevron" id="menuChevron">
           <FaChevronDown />
         </i>
 
         <div className="menuContainer" id="menuContainer">
           <ul>
-            <li>Web design</li>
-            <li>UI / UX</li>
-            <li>Form Design</li>
-            <li>UI design</li>
+            <li>Profile</li>
+            <li>Wallet</li>
           </ul>
         </div>
       </div>

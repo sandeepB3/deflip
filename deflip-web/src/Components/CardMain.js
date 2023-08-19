@@ -2,6 +2,8 @@ import React from "react";
 import { CiDeliveryTruck} from "react-icons/ci";
 
 function CardMain({ imgSrc, title, quantity,cost }) {
+
+  
   return (
     <div className="card_main" style={{"height":"60vh",width:"100%"}}>
       <div></div>
@@ -10,7 +12,7 @@ function CardMain({ imgSrc, title, quantity,cost }) {
         <h2>{title}</h2>
         <div className="card_main_icon">
           <i>
-            <CiDeliveryTruck/><span>{quantity} Units</span>
+            <CiDeliveryTruck /><span>{quantity} Units</span>
           </i>
         </div>
       </div>
@@ -21,16 +23,11 @@ function CardMain({ imgSrc, title, quantity,cost }) {
             Current Cost<span>Rs.{cost}</span>
           </p>
         </div>
-        <div>
-          <p>
-            Ending In<span>1d:12h:10m</span>
-          </p>
-        </div>
       </div>
 
       <div className="card_main_button">
         <a href="#" className="button btn">
-          Place a Bid
+          Stop Supply
         </a>
         <a href="#" className="button2 btn">
           History

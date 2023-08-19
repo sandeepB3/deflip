@@ -33,10 +33,11 @@ export const purchaseCart = async (req, res) => {
               VALUES (?, ?, ?, ?, ?)`;
       for (const item of items) {
           console.log(item)
+          
           const updateProductParams = [item.quantity, item.productID];
           db.query(updateProductQuery, updateProductParams);
 
-          const updateSupplierParams = [item.quantity,item.cost*item.quantity,item.seller];
+          const updateSupplierParams = [item.quantity, item.cost*item.quantity, item.seller];
           db.query(updateSupplierQuery,updateSupplierParams);
           
           const purchaseInsertParams = [item.productID, userID, item.quantity, orderInsertResult.insertId, currentDate];
@@ -44,8 +45,8 @@ export const purchaseCart = async (req, res) => {
       }
       const result = await queryAsync(`SELECT emailID FROM USERS WHERE userID=?`,[userID])
       
-      const tokens=total/100;
-      const balance=await sendUserTokens(result[0].emailID,100)
+      const tokens = total/100;
+      const balance = await sendUserTokens(result[0].emailID, 100)
     
 
       

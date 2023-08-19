@@ -1,0 +1,96 @@
+/* Styles for the popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background: rgb(174, 162, 162);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+    max-width: 300px;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+
+
+  .form-group input {
+    width: 80%;
+    padding: 12px; /* Slightly increased padding for better appearance */
+    border: 1px solid #443b78;
+    border-radius: 8px; /* Slightly increased border radius for rounded corners */
+    background-color: #352e5e; /* Slightly darker background color */
+    color: #e9e9ec;
+    font-size: 16px; /* Slightly increased font size */
+    transition: background-color 0.3s, border-color 0.3s; /* Adding smooth transitions */
+  
+    /* Adding a subtle box-shadow for depth */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  
+    /* Adding a little extra space at the top and bottom */
+    margin: 8px 0;
+  
+    /* Centering the text horizontally */
+    text-align: center;
+  
+    &:hover {
+      background-color: #443b78;
+      border-color: #574baa;
+    }
+  
+    &:focus {
+      outline: none;
+      border-color: #574baa;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  
+  /* Other styles */
+  .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    background: linear-gradient(#ff21bc, #b21783);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.4),
+    inset -5px -10px 10px #b1147d;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background-color: #443b78;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  

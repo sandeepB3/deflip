@@ -90,6 +90,7 @@ export const getAllProducts = async (req, res) => {
   try {
     
     const { supplierID } = req.params;
+    
     db.query(`SELECT * FROM PRODUCT WHERE supplierId = ?`, [supplierID], async (err, result) => {
       if (err) {
         console.error(err);

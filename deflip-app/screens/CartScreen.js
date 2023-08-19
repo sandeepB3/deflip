@@ -40,15 +40,15 @@ const CartScreen = () => {
   const navigation = useNavigation();
 
   const placeOrder = async() =>{
-    const order= product.map((item) => {
+    const order = product.map((item) => {
       return {
         productID: item.productID,
         quantity: item.quantity,
         seller:item.supplierID,
-        cost:item.cost
+        cost: item.cost
       };
     });
-    console.log("Order:",product);
+    console.log("Order: " ,product);
     await axios.post(`http://${URL}:8000/purchase/cart`,{
       items: order,
       total: total,
