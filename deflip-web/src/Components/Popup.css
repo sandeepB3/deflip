@@ -1,0 +1,69 @@
+/* Styles for the popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-group input {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #443b78;
+    border-radius: 5px;
+    background-color: #252041;
+    color: #e9e9ec;
+    font-size: 14px;
+  }
+  
+  /* Other styles */
+  .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    background: linear-gradient(#ff21bc, #b21783);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.4),
+    inset -5px -10px 10px #b1147d;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background-color: #ccc;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  

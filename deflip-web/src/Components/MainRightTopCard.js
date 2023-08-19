@@ -16,11 +16,6 @@ function MainRightTopCard() {
         </p>
 
         <p>
-          Customers Acquired <span>5</span>
-        </p>
-
-
-        <p>
           Products Hosted <span>{auth.state.statistics?.productsHosted}</span>
         </p>
 

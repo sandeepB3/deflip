@@ -3,7 +3,7 @@ import React, { useState,useContext } from 'react';
 import profile from '../img/profile.png'
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 
 import './Signin.css'; // Replace with the path to your CSS file
 
@@ -11,7 +11,7 @@ const SignIn = () => {
   const navigate = useNavigate()
   const [supplierName, setSupplierName] = useState('');
   const [password, setPassword] = useState('');
-    const auth=useContext(AuthContext)
+  const auth=useContext(AuthContext)
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
@@ -28,7 +28,7 @@ const SignIn = () => {
         products:auth.state.products,
         topCustomers:auth.state.topCustomers,
         Authorization:`Bearer ${response.data.token}`,
-        statistics:auth.state.statistics
+        statistics: auth.state.statistics
       })
       localStorage.setItem('token',response.data.token)
       navigate("/")
@@ -70,6 +70,12 @@ const SignIn = () => {
           />
         </div>
         <button className="button" onClick={handleSubmit}>Sign In</button>
+        <br />
+         <br />
+
+        <Link to="/register" className="login-link">
+          Do not have an account? Register
+        </Link>
       </div>
     </div>
   );

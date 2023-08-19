@@ -10,6 +10,7 @@ const AuthState = (props) => {
         products: [],
         topCustomers: [],
         Authorization: '',
+        balance: ''
     }
 
     const [state, setState] = useState(user)

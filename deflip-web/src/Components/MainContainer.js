@@ -34,13 +34,13 @@ const loadAllProducts = async()=>{
     }).then((response)=>{
       console.log(response)
       auth.setState({
-        products:response.data.products,
-        isLoggedIn:auth.state.isLoggedIn,
-        supplier:auth.state.supplier,
-        topCustomers:auth.state.topCustomers,
-      Authorization:auth.state.Authorization,
-      statistics:auth.state.statistics
-
+        products: response.data.products,
+        isLoggedIn: auth.state.isLoggedIn,
+        supplier: auth.state.supplier,
+        topCustomers: auth.state.topCustomers,
+        Authorization: auth.state.Authorization,
+        statistics: auth.state.statistics
+        
       })
     })
 }
