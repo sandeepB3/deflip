@@ -10,7 +10,16 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import { useSelector } from "react-redux";
+
+
+
 const ProfileScreen = () => {
+
+  const userInfo = useSelector((state) => state.user.info);
+  console.log("userInfo : ", userInfo);
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.upperContainer}>
@@ -72,10 +81,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
   },
   innerLeft: {
-    height: Dimensions.get("window").width / 5 + 50,
-    width: Dimensions.get("window").width / 5 + 50,
+    height: Dimensions.get("window").width / 5 + 25,
+    width: Dimensions.get("window").width / 5 + 25,
     borderRadius: 50,
-    backgroundColor: "rgba(60,9,108,1)",
+    backgroundColor: "rgba(60,9,108,0.5)",
     justifyContent: "center",
     alignItems: "center", // Add this to center the image
   },

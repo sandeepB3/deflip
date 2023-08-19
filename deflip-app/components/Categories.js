@@ -1,5 +1,14 @@
 import React from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView} from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import categories from "../jsondata/category";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,29 +23,26 @@ const CategoryItem = ({ category }) => {
   return (
     <TouchableOpacity
       style={styles.categoryItem}
-      onPress={() =>  navigation.navigate("ProductList", { cat: category.category })}
+      onPress={() =>
+        navigation.navigate("ProductList", { cat: category.category })
+      }
     >
       <Image source={category.image} style={styles.cardImage} />
       <Text style={styles.cardText}>{category.category}</Text>
     </TouchableOpacity>
-
   );
-}
+};
 
 const Categories = () => {
   return (
     <View style={styles.mainContainer}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {categories.map((category) => (
-          <CategoryItem
-            key={category.id}
-            category={category}
-          />
+          <CategoryItem key={category.id} category={category} />
         ))}
       </ScrollView>
     </View>
   );
-
 };
 
 const styles = StyleSheet.create({

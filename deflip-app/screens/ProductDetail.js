@@ -23,8 +23,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { addToCart } from "../localStorage/addToCart";
 import { addToWishlist } from "../localStorage/addToWishlist";
 import axios from 'axios';
-// const URL = '192.168.13.201'; // Rohan Wifi
-const URL = '192.168.205.18'
+import { getDataFromDB } from "../localStorage/getFromCart";
+import { useNavigation } from "@react-navigation/native";
+
+const URL = '192.168.13.100'; // Rohan Wifi
+// const URL = '192.168.205.18'
 // const URL = 'localhost'
 
 const COLOURS = {
@@ -40,13 +43,15 @@ const COLOURS = {
 
 
 
-const ProductDetails = () => {
+const ProductDetails = ({route}) => {
+  const { productID } = route.params;
   const [item, setItem] = useState([]);
-  const id=1;
+  const navigation = useNavigation();
+  
     useEffect(() => {
-      axios.get(`http://${URL}:8000/product/details/3`)
+      axios.get(`http://${URL}:8000/product/details/${productID}`)
         .then((response) => {
-          console.log(response.data.product);
+          // console.log("Product Details :  ",response.data.product);
           setItem(response.data.product[0]);
         })
         .catch((err)=>{
@@ -56,32 +61,9 @@ const ProductDetails = () => {
     }, []);
 
 
-  // const addToFavourite = async () => {
-  //   try {
-  //     const cartItems = await AsyncStorage.getItem("FavItems");
-  //     let cartArray = cartItems ? JSON.parse(cartItems) : [];
-
-  //     // Check if the item is already in the cart
-  //     if (!cartArray.includes(item.id)) {
-  //       cartArray.push(item.id);
-
-  //       await AsyncStorage.setItem("FavItems", JSON.stringify(cartArray));
-
-  //       ToastAndroid.show(
-  //         "Item Added Successfully to Wishlist",
-  //         ToastAndroid.SHORT
-  //       );
-  //     } else {
-  //       ToastAndroid.show("Item already in Wishlist", ToastAndroid.SHORT);
-  //     }
-
-  //     console.log(cartItems);
-  //   } catch (error) {
-  //     console.error("Error adding to Wishlist:", error);
-  //   }
-  // };
-// console.log("Product data : ",item);
+    console.log("Product Details :  ",item)
   return (
+
     <SafeAreaView
       style={{
         width: "100%",
@@ -98,12 +80,12 @@ const ProductDetails = () => {
           >
             <AntDesign name="arrowleft" color="white" size={25}></AntDesign>
           </TouchableOpacity>
-          <Text style={styles.topName}>Item Name</Text>
+          <Text style={styles.topName}>{item.productName}</Text>
         </View>
 
-        <View style={styles.topRight}>
+        <TouchableOpacity style={styles.topRight} onPress={()=>navigation.navigate("Cart")} >
           <Icon name="shopping-cart" size={30} color="#3C096C" />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <ScrollView>
@@ -125,6 +107,7 @@ const ProductDetails = () => {
               resizeMode: "contain",
             }}
             source={{uri:item.imgURL}}
+            // source={require("../assets/grandGlobalBrands/Brand1.png")}
           />
         </View>
         <View
@@ -159,6 +142,7 @@ const ProductDetails = () => {
                 onPress={() => {
                   AsyncStorage.clear();
                   ToastAndroid.show("Async Storaqge Cleared", ToastAndroid.SHORT);
+                  console.log(getDataFromDB());
                 }}
                 style={styles.checkbtn}
               >

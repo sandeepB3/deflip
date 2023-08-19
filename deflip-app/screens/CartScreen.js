@@ -13,7 +13,9 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
 import { SafeAreaView } from "react-native-safe-area-context";
-const URL = 'localhost'
+// const URL = 'localhost'
+const URL = '192.168.13.100'; // Rohan Wifi
+
 
 const COLOURS = {
   white: "#ffffff",
@@ -38,7 +40,7 @@ const CartScreen = () => {
   const navigation = useNavigation();
 
   const placeOrder = async() =>{
-    const order= product.map(item => {
+    const order= product.map((item) => {
       return {
         productID: item.productID,
         quantity: item.quantity,
@@ -183,9 +185,10 @@ const CartScreen = () => {
 
       <ScrollView>
         <View style={{ paddingHorizontal: 16 }}>
-          {/* {console.log("Productssss: ",product)} */}
+
           {product ? (
             product.map((data)=>(
+              
               <CartItem key={data.id} data={data}/>
             ))  
           ) : (

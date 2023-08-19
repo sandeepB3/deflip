@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 
 const   ProductCard = ({item}) => {
+  const navigation = useNavigation();
     return (
-        <View style={styles.mainContainer}>
+        <TouchableOpacity style={styles.mainContainer} onPress={()=>navigation.navigate("ProductDetails",{productID : item.productID})}>
             {/* <View> */}
                 <Image style={styles.pImage} source={{ uri : item.imgURL}}/>
             {/* </View> */}
@@ -14,7 +16,7 @@ const   ProductCard = ({item}) => {
                 <Text style={styles.description}>{item.productName.substr(0,20)}</Text>
                 <Text style={styles.price}>₹{item.cost}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
