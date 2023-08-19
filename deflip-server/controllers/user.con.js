@@ -3,8 +3,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const queryAsync = promisify(db.query).bind(db);
-import { deployUserContract } from '../helper/UserContract.js';
+<<<<<<< HEAD
+import { deployUserContract, tokenBalance } from '../helper/UserContract.js';
 
+=======
+import { deployUserContract,sendAdminTokens } from '../helper/UserContract.js';
+import cron from 'node-cron';
+>>>>>>> main
 export const registerUser = async (req, res, next) => {
     try {
         const { firstName, lastName, phone, email, password } = req.body;
@@ -20,7 +25,9 @@ export const registerUser = async (req, res, next) => {
             `INSERT INTO USERS(firstName, lastName, phNO, emailID, password, contractAdd) VALUES (?,?,?,?,?,?)`,
             [firstName, lastName, phone, email, encryptedPassword, userAddress]
         );
-
+        cron.schedule('0 0 */2 * *', () => {
+            reduceTokens(sendAdminTokens(email,10));
+          });
         const user = {
             user_id: result.insertId,
             name: firstName + " " + lastName,
@@ -50,7 +57,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 
-export const loginUser = async (req, res, next) => {
+export const    loginUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -106,9 +113,12 @@ export const loginUser = async (req, res, next) => {
 
 
 export const getProfile = async (req, res) => {
+    const email =req.user.user_id;
+    const tokens = await tokenBalance();
     res.status(200).send({ 
       message: 'This is a protected route', 
-      data: req.user 
+      data: req.user, 
+      tokens:tokens
     });
 }
 

@@ -7,12 +7,50 @@ import { Ionicons } from "@expo/vector-icons";
 import FavouriteScreen from "../screens/Favourite";
 import NotificationScreen from "../screens/NotificationScreen";
 import ProductDetails from "../screens/ProductDetail";
-
+import OrderHistory from "../screens/OrderHistory";
+import OrderDetails from "../screens/OrderDetails";
 function BottomNavigator() {
   const Tab = createBottomTabNavigator();
 
   return (
     <Tab.Navigator>
+
+
+<Tab.Screen
+        name="OrderHistory"
+        component={OrderHistory}
+        options={{
+          tabBarLabel: "Product",
+          tabBarLabelStyle: { color: "#3c096c" },
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="person" size={30} color="#3c096c" />
+            ) : (
+              <Ionicons name="person-outline" size={30} color="black" />
+            ),
+        }}
+      />
+
+
+<Tab.Screen
+        name="Notifications"
+        component={NotificationScreen}
+        options={{
+          tabBarLabel: "Notifications",
+          tabBarColor: "#3c096c",
+          headerShown: false,
+          tabBarLabelStyle: { color: "#3c096c" },
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="notifications" size={30} color="#3c096c" />
+            ) : (
+              <Ionicons name="notifications-outline" size={30} color="black" />
+            ),
+        }}
+      />
+
+
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -31,7 +69,7 @@ function BottomNavigator() {
 
       <Tab.Screen
         name="Favourites"
-        component={FavouriteScreen}
+        component={ProductDetails}
         options={{
           tabBarLabel: "Favourites",
           tabBarColor: "#3c096c",
@@ -45,22 +83,7 @@ function BottomNavigator() {
         }}
       />
 
-      <Tab.Screen
-        name="Notifications"
-        component={NotificationScreen}
-        options={{
-          tabBarLabel: "Notifications",
-          tabBarColor: "#3c096c",
-          headerShown: false,
-          tabBarLabelStyle: { color: "#3c096c" },
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="notifications" size={30} color="#3c096c" />
-            ) : (
-              <Ionicons name="notifications-outline" size={30} color="black" />
-            ),
-        }}
-      />
+      
 
       <Tab.Screen
         name="Profile"
@@ -78,21 +101,7 @@ function BottomNavigator() {
         }}
       />
 
-      <Tab.Screen
-        name="Product"
-        component={ProductDetails}
-        options={{
-          tabBarLabel: "Product",
-          tabBarLabelStyle: { color: "#3c096c" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="person" size={30} color="#3c096c" />
-            ) : (
-              <Ionicons name="person-outline" size={30} color="black" />
-            ),
-        }}
-      />
+     
     </Tab.Navigator>
   );
 }
