@@ -1,10 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Ionicons } from "@expo/vector-icons";
-const COLOURS = {
-  // Define your colors here
-};
+  import { Ionicons } from "@expo/vector-icons";
+
 
 const CartItem = ({ data }) => {
   // console.log("Cart Item : ", data)

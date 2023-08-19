@@ -13,8 +13,8 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
 import { SafeAreaView } from "react-native-safe-area-context";
-// const URL = 'localhost'
-const URL = '192.168.13.100'; // Rohan Wifi
+const URL = '192.168.251.35'
+// const URL = '192.168.13.100'; // Rohan Wifi
 
 
 const COLOURS = {

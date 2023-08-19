@@ -15,12 +15,28 @@ function BottomNavigator() {
   return (
     <Tab.Navigator>
 
+<Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Home",
+          tabBarColor: "#3C096C",
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="home" size={30} color="#3C096C" />
+            ) : (
+              <Ionicons name="home-outline" size={24} color="black" />
+            ),
+        }}
+      />
+
 
 <Tab.Screen
-        name="OrderHistory"
+        name="Misc"
         component={OrderHistory}
         options={{
-          tabBarLabel: "Product",
+          tabBarLabel: "Misc",
           tabBarLabelStyle: { color: "#3c096c" },
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -31,6 +47,10 @@ function BottomNavigator() {
             ),
         }}
       />
+
+
+
+
 
 
 <Tab.Screen
@@ -51,25 +71,10 @@ function BottomNavigator() {
       />
 
 
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: "Home",
-          tabBarColor: "#3C096C",
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="home" size={30} color="#3C096C" />
-            ) : (
-              <Ionicons name="home-outline" size={24} color="black" />
-            ),
-        }}
-      />
-
+      
       <Tab.Screen
         name="Favourites"
-        component={ProductDetails}
+        component={FavouriteScreen}
         options={{
           tabBarLabel: "Favourites",
           tabBarColor: "#3c096c",
@@ -84,8 +89,7 @@ function BottomNavigator() {
       />
 
       
-
-      <Tab.Screen
+<Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -101,6 +105,8 @@ function BottomNavigator() {
         }}
       />
 
+
+   
      
     </Tab.Navigator>
   );

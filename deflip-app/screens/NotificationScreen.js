@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import axios from "axios";
-const URL = "192.168.13.100"; // Rohan Wifi
-// const URL = '192.168.205.18'
+// const URL = "192.168.13.100"; // Rohan Wifi
+const URL = '192.168.251.35'
 // const URL = 'localhost'
 
 const NotificationCard = ({ item }) => {

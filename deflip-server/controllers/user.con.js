@@ -3,13 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const queryAsync = promisify(db.query).bind(db);
-<<<<<<< HEAD
 import { deployUserContract, tokenBalance } from '../helper/UserContract.js';
 
-=======
-import { deployUserContract,sendAdminTokens } from '../helper/UserContract.js';
-import cron from 'node-cron';
->>>>>>> main
 export const registerUser = async (req, res, next) => {
     try {
         const { firstName, lastName, phone, email, password } = req.body;
@@ -25,9 +20,7 @@ export const registerUser = async (req, res, next) => {
             `INSERT INTO USERS(firstName, lastName, phNO, emailID, password, contractAdd) VALUES (?,?,?,?,?,?)`,
             [firstName, lastName, phone, email, encryptedPassword, userAddress]
         );
-        cron.schedule('0 0 */2 * *', () => {
-            reduceTokens(sendAdminTokens(email,10));
-          });
+
         const user = {
             user_id: result.insertId,
             name: firstName + " " + lastName,

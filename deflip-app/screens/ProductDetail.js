@@ -26,8 +26,8 @@ import axios from 'axios';
 import { getDataFromDB } from "../localStorage/getFromCart";
 import { useNavigation } from "@react-navigation/native";
 
-const URL = '192.168.13.100'; // Rohan Wifi
-// const URL = '192.168.205.18'
+// const URL = '192.168.13.100'; // Rohan Wifi
+const URL = '192.168.251.35'
 // const URL = 'localhost'
 
 const COLOURS = {
@@ -142,7 +142,6 @@ const ProductDetails = ({route}) => {
                 onPress={() => {
                   AsyncStorage.clear();
                   ToastAndroid.show("Async Storaqge Cleared", ToastAndroid.SHORT);
-                  console.log(getDataFromDB());
                 }}
                 style={styles.checkbtn}
               >

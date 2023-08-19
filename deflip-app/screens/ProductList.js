@@ -16,8 +16,8 @@ import SearchBar from "../components/Searchbar";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const URL = '192.168.13.100'; // Rohan Wifi
-// const URL = '192.168.205.18'
+// const URL = '192.168.13.100'; // Rohan Wifi
+const URL = '192.168.251.35'
 // const URL = 'localhost'
 const ProductList = ( {route} ) => {
 
