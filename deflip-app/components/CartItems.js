@@ -4,7 +4,6 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 
 const CartItem = ({ data }) => {
-  // console.log("Cart Item : ", data)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.leftContainer}>

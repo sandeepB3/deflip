@@ -2,6 +2,7 @@ import { sendUserTokens, tokenBalance } from '../helper/UserContract.js';
 import { db } from '../utils/db.js';
 import { promisify } from 'util';
 import { publishNotification } from './notification.con.js';
+import {nanoid} from 'nanoid'
 const queryAsync = promisify(db.query).bind(db);
 
 
@@ -9,10 +10,13 @@ const queryAsync = promisify(db.query).bind(db);
 
 export const purchaseCart = async (req, res) => {
   try {
-      console.log("hi")
-      const { items, total, userID } = req.body;
+    //   console.log("hi")
+      const { items, total, userID,couponID } = req.body;
       const currentDate = new Date();
-
+      if(couponID) {
+        await queryAsync(`DELETE FROM COUPONS_MAP WHERE userID =? AND couponID =?`,[userID,couponID,nanoid(),couponID])
+        await queryAsync(`UPDATE COUPONS SET code=? WHERE couponID=?`,[nanoid(),couponID])
+      }
       const orderInsertQuery = `INSERT INTO ORDERS(userID, total, orderDate) VALUES (?, ?, ?)`;
       const orderInsertParams = [userID, total, currentDate];
       const orderInsertResult = await queryAsync(orderInsertQuery, orderInsertParams);
@@ -47,16 +51,12 @@ export const purchaseCart = async (req, res) => {
       
       const tokens = total/100;
       const balance = await sendUserTokens(result[0].emailID, 100)
-    
-
-      
-      
+       
       await publishNotification(`You just made a purchase of ${total} and were awarded ${tokens} chain tokens for it! Your current token balance is ${balance} chain tokens.`,userID)
       
-      res.send({
-          status: 'Purchase Added',
-          status_code: 200,
-          data:result,
+      res.status(200).send({
+          message: 'Purchase Added',
+          data: result,
           tokens: tokens
       });
       

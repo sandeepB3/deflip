@@ -15,6 +15,7 @@ import { getDataFromDB } from "../localStorage/getFromCart";
 import { SafeAreaView } from "react-native-safe-area-context";
 const URL = '192.168.251.35'
 // const URL = '192.168.13.100'; // Rohan Wifi
+import { useSelector } from "react-redux";
 
 
 const COLOURS = {
@@ -33,11 +34,15 @@ const COLOURS = {
 
 const CartScreen = () => {
   const [product, setProduct] = useState();
-  const [total, setTotal] = useState(0);
-  const [visible, setVisible] = useState(false);
+  const [final, setFinal] = useState(0);
+  const [couponDetails, setCouponDetails] = useState({});
+  const [couponCode, setCouponCode] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [discount, setDiscount] = useState(0);
+  const [total, setTotal] = useState(0);
   
   const navigation = useNavigation();
+  const userInfo = useSelector((state) => state.user.info);
 
   const placeOrder = async() =>{
     const order = product.map((item) => {
@@ -45,14 +50,15 @@ const CartScreen = () => {
         productID: item.productID,
         quantity: item.quantity,
         seller:item.supplierID,
-        cost: item.cost
+        cost: item.cost,
+      
       };
     });
-    console.log("Order: " ,product);
     await axios.post(`http://${URL}:8000/purchase/cart`,{
       items: order,
-      total: total,
-      userID: 38
+      total: final,
+      userID: userInfo.user_id,
+      couponID : couponDetails.couponID
     })
   }
 
@@ -71,10 +77,31 @@ const CartScreen = () => {
   }, [navigation]);
 
 
+const validate = async()=>{
+  const data = await axios.post(`http://${URL}:8000/coupon/validate`,{
+    "code" : couponCode,
+    "userID": userInfo.user_id
+  })
+  // console.log(data.data.coupon);
+  if(data.data.coupon){
+    let dat=total-discount;
+    setCouponDetails(data.data.coupon);
+    setDiscount(data.data.coupon.incentive);
+    setFinal(dat);
+  }else{
+    ToastAndroid.show("Invalid Coupon", ToastAndroid.SHORT);
+    
+  }
+
+  
+  
+}
+
+
   //get total price of all items in the cart
   const getTotal = async(productData) => {
     let totalCalc = 0;
-    console.log(total);
+    // console.log(total);
     for (let index = 0; index < productData.length; index++) {
       let productPrice = productData[index].cost* productData[index].quantity;
       totalCalc = totalCalc + productPrice;
@@ -127,22 +154,7 @@ const CartScreen = () => {
     }
   };
 
-  //checkout
-
-  // const checkOut = async () => {
-
-  // try {
-  //   await AsyncStorage.removeItem('cartItems');
-  //   setVisible(true);
-  // } catch (error) {
-  //   return error;
-  // }
-
-  // ToastAndroid.show('Items will be Deliverd SOON!', ToastAndroid.SHORT);
-
-  // navigation.navigate('Home');
-  // };
-
+ 
  
 
   const renderProducts = (data) => {
@@ -222,8 +234,8 @@ const CartScreen = () => {
                 justifyContent: "space-around",
               }}
             >
-              <TextInput style={styles.coupontxt} placeholder="COUPON CODE" />
-              <TouchableOpacity style={styles.applyBtn}>
+              <TextInput style={styles.coupontxt} onChangeText={(text) => setCouponCode(text)} placeholder="COUPON CODE" />
+              <TouchableOpacity style={styles.applyBtn} onPress={validate}>
                 <Text style={styles.applyBtnTxt}>Apply</Text>
               </TouchableOpacity>
             </View>
@@ -237,15 +249,11 @@ const CartScreen = () => {
             <Text style={{ paddingLeft: 10, fontWeight: "bold" }}> PRICE</Text>
             <View style={styles.row}>
               <Text style={styles.tag}> Total Price</Text>
-              <Text style={styles.amount}> ₹{7000}</Text>
+              <Text style={styles.amount}> ₹{total}</Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.tag}> Total Discount</Text>
-              <Text style={styles.amount}> ₹{500}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.tag}> Total Tax</Text>
-              <Text style={styles.amount}> ₹{100}</Text>
+              <Text style={styles.amount}> ₹{discount}</Text>
             </View>
             <View style={styles.hr}></View>
             <View style={styles.row}>
@@ -253,7 +261,7 @@ const CartScreen = () => {
                 {" "}
                 Total Amount
               </Text>
-              <Text style={styles.amount}> ₹{total}</Text>
+              <Text style={styles.amount}> ₹{final}</Text>
             </View>
           </View>
         </View>
@@ -273,7 +281,7 @@ const CartScreen = () => {
           style={styles.checkoutBtn}
         >
           <Text style={styles.checkoutBtnTxt}>
-            PLACE ORDER ₹{total} 
+            PLACE ORDER ₹{final} 
           </Text>
         </TouchableOpacity>
       </View>

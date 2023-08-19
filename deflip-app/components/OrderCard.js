@@ -13,7 +13,6 @@ import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const OrderCard = ({ item }) => {
-  console.log("Order in OrdrCard : ", item);
 
   const orderDate = new Date(item.orderDate);
   const formattedDate = orderDate.toDateString();

@@ -17,56 +17,7 @@ import { useSelector } from "react-redux";
 
 const URL = "192.168.251.35";
 
-const fakeApiData = [
-  {
-    id: 1,
-    offer: 200,
-    limit: 2500,
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-  {
-    id: 2,
-    offer: "₹500 Off",
-    limit: "Description for Coupon 2",
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-  {
-    id: 3,
-    offer: "Coupon 3",
-    limit: "Description for Coupon 3",
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-  {
-    id: 4,
-    offer: "Coupon 4",
-    limit: "Description for Coupon 3",
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-  {
-    id: 5,
-    offer: "Coupon 5",
-    limit: "Description for Coupon 3",
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-  {
-    id: 6,
-    offer: "Coupon 6",
-    limit: "Description for Coupon 3",
-    brandImage:
-      "https://media.licdn.com/dms/image/C560BAQF6H8gAs-JyFg/company-logo_200_200/0/1627543110554?e=2147483647&v=beta&t=8-XBSF4YBb0Jxbok0ztoN4N_l8VArFvim4q9HBIAxBM",
-    coupon: "ABC",
-  },
-];
+
 
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -82,23 +33,23 @@ const RedeemScreen = () => {
   };
 
   const [brandcoupons, setBrandCoupons] = useState([]);
-  const [instorecoupons, setInstoreCoupons] = useState([]);
+  const [coupons, setCoupons] = useState([]);
 
   const isFocused = useIsFocused();
   useEffect(() => {
     if (isFocused) {
       axios
-        .get(`http://${URL}:8000/coupon/fetchLocked/${userInfo.user_id}`)
+        .get(`http://${URL}:8000/coupon/fetchUnlocked/${userInfo.user_id}`)
         .then((response) => {
           console.log("Response : ", response.data);
           setBrandCoupons(response.data.brandCoupons);
-          setInstoreCoupons(response.data.instoreCoupons);
+          setCoupons(response.data.instoreCoupons);
         });
     }
   }, [isFocused]);
 
   const renderContent = () => {
-    const data = selectedOption == "inStore" ? instorecoupons : brandcoupons;
+    const data = selectedOption == "inStore" ? coupons : brandcoupons;
   
     return (
       <ScrollView style={{ paddingVertical: 10, paddingHorizontal: 20 }}>

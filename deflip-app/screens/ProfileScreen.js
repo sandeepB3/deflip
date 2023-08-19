@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -10,23 +10,50 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+const URL = '192.168.251.35'
 
-const deleteAsync = async (key) => {
-  try {
-    await AsyncStorage.removeItem(key);
-    console.log("Logout Successful.");
-  } catch (error) {
-    console.error("Error deleting variable:", error);
-  }
-};
 const ProfileScreen = () => {
+  // console.log("Token setting : ",AsyncStorage.getItem("authToken"))
+  const isFocused = useIsFocused();
+
   const navigation = useNavigation();
 
+  const fetch = async() =>{
+    const token = await AsyncStorage.getItem("authToken");
+    // console.log(token);
+    try {
+      const { data } = await axios.get(`http://${URL}:8000/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("Data:", data);
+    } catch (err) {
+      console.log("Error : ",err);
+    }
+  }
+  useEffect(() => {
+
+    fetch();
+
+  }, [isFocused]);
+
+
+  const deleteAsync = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      console.log("Logout Successful.");
+      navigation.replace("Login");
+  
+    } catch (error) {
+      console.error("Error deleting variable:", error);
+    }
+  };
+
   const userInfo = useSelector((state) => state.user.info);
-  console.log("userInfo : ", userInfo);
+  // console.log("userInfo : ", userInfo);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -71,10 +98,18 @@ const ProfileScreen = () => {
           <AntDesign name="edit" size={30} color="rgb(60,9,108)" />
           <Text style={styles.txt}>Offers</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.box} onPress={() => {navigation.navigate("UnlockedCoupons")}}>
+          <AntDesign name="edit" size={30} color="rgb(60,9,108)" />
+          <Text style={styles.txt}>Unlocked Coupons</Text>
+        </TouchableOpacity>
+
+
         <TouchableOpacity style={styles.box} onPress={() => {}}>
           <AntDesign name="edit" size={30} color="rgb(60,9,108)" />
           <Text style={styles.txt}>Settings</Text>
         </TouchableOpacity>
+        
 
         <TouchableOpacity
           style={styles.logout}

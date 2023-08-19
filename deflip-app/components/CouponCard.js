@@ -9,34 +9,51 @@ import {
   Dimensions,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import { useSelector } from "react-redux";
+import axios from "axios";
+const URL = '192.168.251.35'
 
-const CouponCard = ({ offer, limit, brandImage, coupon }) => {
+const CouponCard = ({ coupon }) => {
   const [copiedText, setCopiedText] = React.useState("");
+  const userInfo = useSelector((state) => state.user.info);
 
-  const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(coupon);
-  };
+  // const copyToClipboard = async () => {
+  //   await Clipboard.setStringAsync(coupon);
+  // };
+
+  const Unlock=async()=>{
+    await axios.post(`http://${URL}:8000/coupon/unlock`,{
+      "userID":userInfo.user_id,
+      "couponID":coupon.couponID,
+      "username":userInfo.email,
+      "cost":coupon.cost,
+    })
+  }
 
   return (
     <View style={styles.outercard}>
       <View style={styles.innercard}>
         <View style={styles.left}>
-          <Image source={{ uri: brandImage }} style={styles.image}></Image>
+          <Text>{coupon.brand}</Text>
+          {/* <Image source={{ uri: brandImage }} style={styles.image}></Image> */}
         </View>
         <View style={styles.right}>
-          <Text style={styles.offer}>{offer}</Text>
-          <Text style={styles.limit}>{limit}</Text>
+          <Text style={styles.offer}>{coupon.offer}</Text>
+          <Text style={styles.limit}>{coupon.cost}</Text>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.tag}>Coupon Code: </Text>
-            <Text style={styles.coupon}>{coupon}</Text>
+            <Text style={styles.coupon}>{coupon.code}</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.tag}>Expiry : </Text>
             <Text style={styles.expiry}>25-08-2024</Text>
           </View>
-          <TouchableOpacity onPress={copyToClipboard} style={styles.copyButton}>
-            <Text style={styles.copyButtonText}>Copy Code</Text>
+          <TouchableOpacity style={styles.copyButton} onPress={Unlock}> 
+            <Text style={styles.copyButtonText}>Unlock</Text>
           </TouchableOpacity>
+          {/* <TouchableOpacity onPress={copyToClipboard} style={styles.copyButton}>
+            <Text style={styles.copyButtonText}>Copy Code</Text>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

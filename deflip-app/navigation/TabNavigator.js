@@ -32,23 +32,6 @@ function BottomNavigator() {
       />
 
 
-<Tab.Screen
-        name="Misc"
-        component={OrderHistory}
-        options={{
-          tabBarLabel: "Misc",
-          tabBarLabelStyle: { color: "#3c096c" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="person" size={30} color="#3c096c" />
-            ) : (
-              <Ionicons name="person-outline" size={30} color="black" />
-            ),
-        }}
-      />
-
-
 
 
 

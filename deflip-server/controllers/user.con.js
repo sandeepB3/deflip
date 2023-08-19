@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const queryAsync = promisify(db.query).bind(db);
-import { deployUserContract, sendAdminTokens, tokenBalance } from '../helper/UserContract.js';
+import { deployUserContract, sendAdminTokens, tokenBalance  } from '../helper/UserContract.js';
 import cron from 'node-cron';
 
 export const registerUser = async (req, res) => {
@@ -17,19 +17,23 @@ export const registerUser = async (req, res) => {
         const userAddress = await deployUserContract(username)
         console.log(userAddress)
 
+        
         const result = await queryAsync(
             `INSERT INTO USERS(firstName, lastName, phNO, emailID, password, contractAdd) VALUES (?,?,?,?,?,?)`,
             [firstName, lastName, phone, email, encryptedPassword, userAddress]
         );
 
-        cron.schedule('0 0 */1 * *', async () => await sendAdminTokens(email, 10));
+        const tokens = await tokenBalance(email);
+
+        // cron.schedule('*/15 * * * *', async () => await sendAdminTokens(email, 10));
 
         const user = {
             user_id: result.insertId,
             name: firstName + " " + lastName,
             phone: phone,
             email: email,
-            contract: userAddress
+            contract: userAddress,
+            balance: tokens
         }
 
         const accessToken = jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
@@ -53,7 +57,7 @@ export const registerUser = async (req, res) => {
 };
 
 
-export const    loginUser = async (req, res, next) => {
+export const loginUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -70,12 +74,16 @@ export const    loginUser = async (req, res, next) => {
                 const comparison = await bcrypt.compare(password, result[0].password);
                 if (comparison) {
                     
+
+                    const tokens = await tokenBalance(email);
+
                     const user = {
                         user_id: result[0].userID,
                         name: result[0].firstName + " " + result[0].lastName,
                         phone: result[0].phNO,
                         email: result[0].emailID,
-                        contract: result[0].contractAdd
+                        contract: result[0].contractAdd,
+                        balance: tokens
                     }
 
                     const accessToken = jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
@@ -109,12 +117,15 @@ export const    loginUser = async (req, res, next) => {
 
 
 export const getProfile = async (req, res) => {
-    const email = req.user.user_id;
+    const email = req.user.user.email;
+    console.log("Server log : ",req.user)
     const tokens = await tokenBalance(email);
+    req.user.user.balance = tokens
+    console.log(tokens)
     res.status(200).send({ 
       message: 'This is a protected route', 
       data: req.user, 
-      tokens:tokens
+      tokens
     });
 }
 
