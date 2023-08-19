@@ -9,8 +9,9 @@ const Popup = ({ onClose, onSubmit, seller, customer, auth }) => {
     e.preventDefault();
 
     try{
+        console.log(seller, customer, auth, inputValue);
         const response = await axios.post('http://localhost:8000/supplier/sendTokens',
-        { seller, customer,  inputValue}, { headers: { 'Authorization': auth}})
+        { supplier: seller, customer,  token: inputValue}, { headers: { 'Authorization': auth}})
 
         onSubmit(response);
         onClose();

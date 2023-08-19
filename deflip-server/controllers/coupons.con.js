@@ -1,6 +1,7 @@
 import { db } from "../utils/db.js"
 import { v4 as uuidv4 } from 'uuid';
 import { sendAdminTokens,tokenBalance } from "../helper/UserContract.js";
+
 export const createCoupon = async (req, res) => {
     try{
     const {cost,brand,offer}=req.body
@@ -17,13 +18,14 @@ export const createCoupon = async (req, res) => {
         res.status(500).send('Internal server error');
     }  
 }
+
 export const unlockCoupon = async (req, res) => {
     try{
-    const {couponID,userID,username,cost}=req.body
-    const balance=tokenBalance(username)
-    if(balance<cost) return res.status(401).send({"message":"Insufficient Balance"})
-    sendAdminTokens(username,cost)
-    db.query('INSERT INTO COUPONS_MAP (couponID,userID) VALUES(?, ?)', [couponID,userID])
+    const {couponID, userID, username,cost}=req.body
+    const balance = await tokenBalance(username)
+    if(balance < cost) return res.status(401).send({"message":"Insufficient Balance"})
+    await sendAdminTokens(username, cost)
+    db.query('INSERT INTO COUPONS_MAP (couponID,userID) VALUES(?, ?)', [couponID, userID])
     res.status(200).send({
         message:"Coupon unlocked successfully"
     })

@@ -2,8 +2,8 @@ import {React, useContext, useState} from "react";
 import TopSeller from "./TopSeller";
 import user from "../img/user.jpeg";
 import { AuthContext } from "../contexts/AuthContext";
-
 import Popup from "./Popup";
+
 
 function MainRightBottomCard() {
 
@@ -24,7 +24,18 @@ function MainRightBottomCard() {
   };
 
   const handlePopupSubmit = (response) => {
-    console.log('Response Value:', response);
+    const { data } = response.data
+    console.log('Response Value:', data);
+
+    auth.setState({
+      isLoggedIn: auth.state.isLoggedIn,
+      supplier: auth.state.supplier,
+      products: auth.state.products,
+      topCustomers: auth.state.topCustomers,
+      Authorization: auth.state.Authorization,
+      statistics: auth.state.statistics,
+      balance: data.supplierTokens
+    });
   };
 
   return (

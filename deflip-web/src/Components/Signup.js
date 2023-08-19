@@ -32,7 +32,8 @@ const SignIn = () => {
         products: auth.state.products,
         topCustomers: auth.state.topCustomers,
         Authorization:`Bearer ${response.data.token}`,
-        statistics: auth.state.statistics
+        statistics: auth.state.statistics,
+        balance: response.data.balance
       })
 
       localStorage.setItem('token',response.data.token)

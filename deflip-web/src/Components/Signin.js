@@ -15,7 +15,7 @@ const SignIn = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-       const response= await axios.post('http://localhost:8000/supplier/login',{
+       const response = await axios.post('http://localhost:8000/supplier/login',{
           supplierName,
           password,
       })
@@ -24,11 +24,12 @@ const SignIn = () => {
       if(response.status === 200){
         auth.setState({
         isLoggedIn:true,
-        supplier:response.data.supplier,
-        products:auth.state.products,
-        topCustomers:auth.state.topCustomers,
-        Authorization:`Bearer ${response.data.token}`,
-        statistics: auth.state.statistics
+        supplier: response.data.supplier,
+        products: auth.state.products,
+        topCustomers: auth.state.topCustomers,
+        Authorization: `Bearer ${response.data.token}`,
+        statistics: auth.state.statistics,
+        balance: response.data.balance
       })
       localStorage.setItem('token',response.data.token)
       navigate("/")

@@ -44,7 +44,6 @@ function Menu() {
       </ul>
 
       <ul className="lastMenu">
-        <Icon icon={<FaCog />} />
         <Icon icon={<FaSignOutAlt />} logout={logout}/>
       </ul>
     </menu>

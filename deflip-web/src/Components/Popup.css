@@ -5,29 +5,56 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent overlay */
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay */
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
   .popup-content {
-    background-color: white;
+    background: rgb(174, 162, 162);
+    border-radius: 10px;
     padding: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+    max-width: 300px;
+    width: 100%;
+    text-align: center;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   }
 
+
   .form-group input {
-    width: 100%;
-    justify-content: center;
-    padding: 10px;
+    width: 80%;
+    padding: 12px; /* Slightly increased padding for better appearance */
     border: 1px solid #443b78;
-    border-radius: 5px;
-    background-color: #252041;
+    border-radius: 8px; /* Slightly increased border radius for rounded corners */
+    background-color: #352e5e; /* Slightly darker background color */
     color: #e9e9ec;
-    font-size: 14px;
+    font-size: 16px; /* Slightly increased font size */
+    transition: background-color 0.3s, border-color 0.3s; /* Adding smooth transitions */
+  
+    /* Adding a subtle box-shadow for depth */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  
+    /* Adding a little extra space at the top and bottom */
+    margin: 8px 0;
+  
+    /* Centering the text horizontally */
+    text-align: center;
+  
+    &:hover {
+      background-color: #443b78;
+      border-color: #574baa;
+    }
+  
+    &:focus {
+      outline: none;
+      border-color: #574baa;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
   }
+  
   
   /* Other styles */
   .button {
@@ -54,7 +81,7 @@
   }
   
   .cancel-button {
-    background-color: #ccc;
+    background-color: #443b78;
     font-size: 14px;
     text-decoration: none;
     border-radius: 10px;

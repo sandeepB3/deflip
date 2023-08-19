@@ -2,7 +2,7 @@ import {React,useContext} from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 function MainRightTopCard() {
-  const auth=useContext(AuthContext)
+  const auth = useContext(AuthContext)
   return (
     <div className="topCard">
       <div className="topCard_name">

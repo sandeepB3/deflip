@@ -38,15 +38,16 @@ export const sendTopCustomerTokens = async (req, res) => {
 
   try{
     const { supplier, customer, token } = req.body;
+    const [username, domain] = customer.split('@');
 
-    const gasLimit = await kartInstance.methods.transferFromSeller(supplier, customer, token).estimateGas(); 
+    const gasLimit = await kartInstance.methods.transferFromSeller(supplier, username, token).estimateGas(); 
     transaction.gasLimit = gasLimit;
 
-    const transferDetails = await kartInstance.methods.transferFromSeller(supplier, customer, token).send(transaction);
+    const transferDetails = await kartInstance.methods.transferFromSeller(supplier, username, token).send(transaction);
     console.log(transferDetails);
 
     const supplierTokens = await kartInstance.methods.checkBalance(supplier).call();
-    const userTokens = await kartInstance.methods.checkBalance(customer).call();  
+    const userTokens = await kartInstance.methods.checkBalance(username).call();  
 
     console.log('Tokens transfered successfully');
     res.send({
