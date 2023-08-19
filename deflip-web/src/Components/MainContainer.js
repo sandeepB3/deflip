@@ -7,6 +7,7 @@ import MainRightBottomCard from "./MainRightBottomCard";
 import AllProducts from "./allProducts";
 import AddItemForm from "./AddItemForm";
 import axios from "axios";
+import Timer from "./Timer";
 
 function MainContainer() {
   const auth = useContext(AuthContext)
@@ -34,13 +35,13 @@ const loadAllProducts = async()=>{
     }).then((response)=>{
       console.log(response)
       auth.setState({
-        products:response.data.products,
-        isLoggedIn:auth.state.isLoggedIn,
-        supplier:auth.state.supplier,
-        topCustomers:auth.state.topCustomers,
-      Authorization:auth.state.Authorization,
-      statistics:auth.state.statistics
-
+        products: response.data.products,
+        isLoggedIn: auth.state.isLoggedIn,
+        supplier: auth.state.supplier,
+        topCustomers: auth.state.topCustomers,
+        Authorization: auth.state.Authorization,
+        statistics: auth.state.statistics,
+        balance: auth.state.balance
       })
     })
 }
@@ -60,14 +61,14 @@ const loadAllProducts = async()=>{
         >
           <div className="textContainer">
             <h1>{auth.state.supplier.supplierName}</h1>
-            <h2>1.5 ETH</h2>
-            <p>Uploaded by Alexander Vernof</p>
+            <p>Buy our Premium Subscription at</p>
+            <h2>₹ 400</h2>
             <div className="bid">
               <a href="#" className="button">
-                Bid Now
+                Buy Now
               </a>
               <p>
-                Ending In <span>2d:15h:20m</span>
+                Ending In <span><Timer /></span>
               </p>
             </div>
           </div>
@@ -105,7 +106,7 @@ const loadAllProducts = async()=>{
             <CardMain imgSrc={Card6} title={"Crystal Bird"} hearts={"65"} /> */}
 
             {showAll && <AllProducts/>}
-            {showAdd && <AddItemForm/>}
+            {showAdd && <AddItemForm />}
             
           </main>
         </div>

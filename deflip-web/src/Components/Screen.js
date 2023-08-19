@@ -28,7 +28,8 @@ async function fetchData(token, auth) {
       products: response.data.products,
       topCustomers: response.data.topCustomers,
       Authorization: `Bearer ${token}`,
-      statistics:response.data.statistics
+      statistics: response.data.statistics,
+      balance: response.data.balance
     });
     
   } catch (error) {

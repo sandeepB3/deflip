@@ -1,9 +1,23 @@
 import React, { useEffect } from "react";
 import "./Menu.css";
 import logo from "../img/logo.png";
+import chainkart from "../img/chainkart.png";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import { FaDelicious, FaShoppingCart, FaWallet, FaChartLine, FaRegClock, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 function Menu() {
+
+  const navigate = useNavigate()
+  async function logout() {
+    try{
+      await axios.post('http://localhost:8000/supplier/logout');
+      localStorage.removeItem('token');
+      navigate("/login")
+    }catch(err){
+      console.log(err);
+    }
+  }
   
   useEffect(() => {
     const mainMenuLi = document
@@ -18,29 +32,28 @@ function Menu() {
     mainMenuLi.forEach((n) => n.addEventListener("click", changeActive));
   }, []);
 
+
   return (
     <menu>
       <img src={logo} alt="" />
 
       <ul id="mainMenu">
-        <Icon icon={<FaDelicious />} />
-        <Icon icon={<FaShoppingCart />} />
         <Icon icon={<FaWallet />} />
         <Icon icon={<FaChartLine />} />
         <Icon icon={<FaRegClock />} />
       </ul>
 
       <ul className="lastMenu">
-        <Icon icon={<FaCog />} />
-        <Icon icon={<FaSignOutAlt />} />
+        <Icon icon={<FaSignOutAlt />} logout={logout}/>
       </ul>
     </menu>
   );
 }
 
-const Icon = ({ icon }) => (
+const Icon = ({ icon, logout }) => (
+
   <li>
-    <a href="#">{icon}</a>
+    <a onClick={logout}>{icon}</a>
   </li>
 );
 

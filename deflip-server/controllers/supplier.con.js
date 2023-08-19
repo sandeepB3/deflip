@@ -26,7 +26,7 @@ export const addSupplier = async (req, res) => {
         supplierID: result.insertId,
         email: supplierName,
         address: address,
-        contract: sellerAddress
+        contract: sellerAddress,
       }
 
       const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
@@ -42,6 +42,7 @@ export const addSupplier = async (req, res) => {
         status_code: 200,
         supplier: supplier,
         token: accessToken,
+        balance: tokens
       });
 
     } catch (err) {
@@ -74,13 +75,16 @@ export const loginSupplier = async (req, res) => {
             address: result1[0].address,
             contract: result1[0].contractAdd
           }
+
+          const balance = await tokenBalance(result1[0].supplierName);
           
           const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
 
           res.status(200).send({
             message: 'Auth Successfull',
             supplier,
-            token: accessToken
+            token: accessToken,
+            balance: balance
           })
 
         }
