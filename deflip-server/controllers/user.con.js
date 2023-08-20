@@ -119,13 +119,13 @@ export const loginUser = async (req, res, next) => {
 export const getProfile = async (req, res) => {
     const email = req.user.user.email;
     console.log("Server log : ",req.user)
-    const tokens = await tokenBalance(email);
+    // const tokens = await tokenBalance(email);
     req.user.user.balance = tokens
     console.log(tokens)
     res.status(200).send({ 
       message: 'This is a protected route', 
       data: req.user, 
-      tokens
+      tokens:50
     });
 }
 

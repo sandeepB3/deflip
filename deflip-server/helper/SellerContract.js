@@ -1,5 +1,5 @@
 import { kartInstance, transaction } from '../utils/contract.js';
-
+import { publishNotification } from '../controllers/notification.con.js';
 export const deploySellerContract = async (supplierName) => {
     try{
       const gasLimit = await kartInstance.methods.deploySellerContract(supplierName).estimateGas(); 
@@ -37,7 +37,7 @@ export const sendSupplierTokens = async (supplierName, val) => {
 export const sendTopCustomerTokens = async (req, res) => {
 
   try{
-    const { supplier, customer, token } = req.body;
+    const { supplier, customer, token,userID } = req.body;
     const [username, domain] = customer.split('@');
 
     const gasLimit = await kartInstance.methods.transferFromSeller(supplier, username, token).estimateGas(); 
@@ -49,6 +49,7 @@ export const sendTopCustomerTokens = async (req, res) => {
     const supplierTokens = await kartInstance.methods.checkBalance(supplier).call();
     const userTokens = await kartInstance.methods.checkBalance(username).call();  
 
+    publishNotification(`You were just awarded ${token} Chain Tokens by ${supplier} for being one of their top customers!`,userID)
     console.log('Tokens transfered successfully');
     res.send({
       status: 'Tokens transfered successfully',

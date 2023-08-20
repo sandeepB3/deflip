@@ -38,9 +38,9 @@ function Menu() {
       <img src={logo} alt="" />
 
       <ul id="mainMenu">
-        <Icon icon={<FaWallet />} />
+        {/* <Icon icon={<FaWallet />} />
         <Icon icon={<FaChartLine />} />
-        <Icon icon={<FaRegClock />} />
+        <Icon icon={<FaRegClock />} /> */}
       </ul>
 
       <ul className="lastMenu">

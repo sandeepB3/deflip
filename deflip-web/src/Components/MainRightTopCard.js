@@ -20,6 +20,9 @@ function MainRightTopCard() {
         </p>
 
         <p>
+         Customers Acquired <span>{auth.state.statistics?.customersAcquired}</span>
+        </p>
+        <p>
           Revenue Generated <span>{auth.state.statistics?.revenue}</span>
         </p>
       </div>

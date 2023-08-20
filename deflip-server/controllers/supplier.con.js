@@ -76,15 +76,15 @@ export const loginSupplier = async (req, res) => {
             contract: result1[0].contractAdd
           }
 
-          const balance = await tokenBalance(result1[0].supplierName);
+          // const balance = await tokenBalance(result1[0].supplierName);
           
           const accessToken = jwt.sign({ supplier }, process.env.SECRET_KEY, { expiresIn: process.env.AT_EXP });
 
           res.status(200).send({
             message: 'Auth Successfull',
             supplier,
-            token: accessToken,
-            balance: balance
+            token: accessToken
+            // balance: balance
           })
 
         }
@@ -208,7 +208,14 @@ export const loadData = async (req, res, next) => {
 
       const balance = await tokenBalance(supplier[0].supplierName);
       
-
+      const uniqueCustomerQuery=`SELECT COUNT(DISTINCT pr.userID) AS uniqueCustomerCount
+FROM SUPPLIER s
+JOIN PRODUCT p ON s.supplierID = p.supplierID
+JOIN PURCHASE pr ON p.productID = pr.productID
+WHERE s.supplierID = ?
+GROUP BY s.supplierID, s.supplierName`;
+const result = await queryAsync(uniqueCustomerQuery, [supplierID]);
+console.log(result[0].uniqueCustomerCount)
       res.status(200).send({
         message: 'Data Loaded',
         products,
@@ -217,7 +224,8 @@ export const loadData = async (req, res, next) => {
         statistics:{
           unitSold:supplier[0].unitSold,
           revenue:supplier[0].revenue,
-          productsHosted:products.length
+          productsHosted:products.length,
+          customersAcquired:result[0].uniqueCustomerCount
         },
         balance
       });
